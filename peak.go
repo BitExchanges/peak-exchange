@@ -16,13 +16,14 @@ import (
 
 func main() {
 
-	initialize()
+	//initialize()
 	//记录日志
 	f, _ := os.Create("peak.log")
-	gin.DefaultWriter = io.MultiWriter(f)
+	//仅将日志写入文件
+	//gin.DefaultWriter = io.MultiWriter(f)
 
 	//同时将日志写入文件和控制台
-	//gin.DefaultWriter=io.MultiWriter(f,os.Stdout)
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 
 	router := gin.Default()
 	routes.SetInterfaces(router)

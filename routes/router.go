@@ -24,4 +24,9 @@ func SetInterfaces(e *gin.Engine) {
 		currencyRoute.GET("/currencyList")
 	}
 
+	userRoute := e.Group("/api/:platform/v1/user")
+	{
+		userRoute.POST("/register", api.Register())
+	}
+
 }

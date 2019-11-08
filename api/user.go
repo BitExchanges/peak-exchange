@@ -10,12 +10,14 @@ import (
 	"time"
 )
 
-func Login() gin.HandlerFunc {
+func Register() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var user User
 		err := ctx.BindJSON(&user)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, utils.BuildError("10001").Error())
+		} else {
+			generateToken(ctx, user)
 		}
 	}
 }
@@ -35,5 +37,7 @@ func generateToken(ctx *gin.Context, user User) {
 	token, err := j.CreateToken(claims)
 	if err != nil {
 		ctx.JSON(http.StatusOK, utils.BuildError("10002").Error())
+		return
 	}
+	ctx.JSON(http.StatusOK, utils.Success(token))
 }

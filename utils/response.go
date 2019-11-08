@@ -31,6 +31,10 @@ func BuildError(code string) Response {
 	return Response{Head: map[string]string{"code": code}}
 }
 
+func Success(data interface{}) Response {
+	return Response{Head: map[string]string{"code": "0", "msg": "success"}, Body: data}
+}
+
 func (errResponse Response) Error() string {
 	return fmt.Sprintf("code:%s;msg:%s", errResponse.Head["code"], errResponse.Head["msg"])
 }
