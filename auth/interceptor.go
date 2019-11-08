@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"peak-exchange/utils"
@@ -16,6 +17,12 @@ func Authorize() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		} else {
+			//解析token
+			j := NewJwt()
+			claims, err := j.ParseToken(token)
+			if err != nil {
+				fmt.Println("token解析校验失败:", claims)
+			}
 			ctx.Next()
 		}
 	}

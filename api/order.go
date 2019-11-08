@@ -5,13 +5,18 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	. "peak-exchange/model"
+	"peak-exchange/utils"
 )
 
 func GetOrderBook() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		param := ctx.Param("platform")
 		fmt.Printf("接收参数: %s\n", param)
-		ctx.JSON(http.StatusOK, gin.H{"message": "order_book"})
+		order := Order{}
+		order.Id = 1
+		order.OrderNo = "o132421"
+		ctx.JSON(http.StatusOK, utils.Success(order))
+		//ctx.JSON(http.StatusOK, gin.H{"message": "order_book"})
 	}
 }
 

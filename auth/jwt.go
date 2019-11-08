@@ -3,9 +3,6 @@ package auth
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
-	"net/http"
-	"peak-exchange/utils"
 )
 
 var (
@@ -19,19 +16,6 @@ var (
 type Claims struct {
 	Mobile string `json:"mobile"`
 	jwt.StandardClaims
-}
-
-// JWT认证
-// TODO decrepted
-func JwtAuth() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		token := ctx.Request.Header.Get("token")
-		if token == "" {
-			ctx.JSON(http.StatusOK, utils.Response{Head: map[string]string{"code": "10000", "msg": "token认证失败"}})
-			ctx.Abort()
-			return
-		}
-	}
 }
 
 type JWT struct {

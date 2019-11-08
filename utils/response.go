@@ -1,7 +1,5 @@
 package utils
 
-import "fmt"
-
 type Response struct {
 	Head map[string]string `json:"head"`
 	Body interface{}       `json:"body"`
@@ -23,23 +21,22 @@ type PageResponse struct {
 
 // 定义传统以及分页成功返回
 var (
+	SuccessBase         = map[string]interface{}{"code": "0", "msg": "success"}
 	SuccessResponse     = Response{Head: map[string]string{"code": "0", "msg": "success"}}
 	PageSuccessResponse = PageResponse{Head: map[string]string{"code": "0", "msg": "success"}}
 )
 
-func BuildError(code string) Response {
-	return Response{Head: map[string]string{"code": code}}
+// 组装错误返回
+func BuildError(code, msg string) map[string]string {
+	return map[string]string{"code": code, "msg": msg}
 }
 
-func Success(data interface{}) Response {
-	return Response{Head: map[string]string{"code": "0", "msg": "success"}, Body: data}
+// 组装成功返回
+func Success(data interface{}) map[string]interface{} {
+	return map[string]interface{}{"code": "0", "msg": "success", "data": data}
 }
 
-func (errResponse Response) Error() string {
-	return fmt.Sprintf("code:%s;msg:%s", errResponse.Head["code"], errResponse.Head["msg"])
-}
-
-func (pageRes PageResponse) Init(data interface{}, page, count, perPage int) {
+func PageInit(data interface{}, page, count, perPage int) map[string]interface{} {
 	//总条数 除以 每页条数 = 总页数
 	//如果有余数 则总页数+1
 	totalPage := count / perPage
@@ -66,5 +63,5 @@ func (pageRes PageResponse) Init(data interface{}, page, count, perPage int) {
 	body.CurrentPage = page
 	body.Data = data
 	body.PerPage = perPage
-	pageRes.Body = body
+	return map[string]interface{}{"code": "0", "msg": "success", "data": body}
 }

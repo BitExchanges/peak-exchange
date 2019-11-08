@@ -1,1 +1,3 @@
-[GIN] 2019/11/08 - 14:22:18 | 200 |     153.333µs |             ::1 | GET      /api/test/v1/currency/currencyList
+[GIN] 2019/11/08 - 18:21:15 | 200 |     435.483µs |             ::1 | GET      /api/test/v1/order/getOrderBook
+[GIN] 2019/11/08 - 18:21:15 | 404 |         994ns |             ::1 | GET      /favicon.ico
+[GIN] 2019/11/08 - 18:21:38 | 200 |      86.675µs |             ::1 | GET      /api/test/v1/order/getOrderBook

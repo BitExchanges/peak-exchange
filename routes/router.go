@@ -8,10 +8,7 @@ import (
 
 func SetInterfaces(e *gin.Engine) {
 
-	// 路由分组
-	// 订单组  orderRoute
-	// 用户组  userRoute
-	// 交易组  tradeRoute
+	// 订单组
 	orderRoute := e.Group("/api/:platform/v1/order")
 	orderRoute.Use(auth.Authorize())
 	{
@@ -21,15 +18,18 @@ func SetInterfaces(e *gin.Engine) {
 		orderRoute.POST("/taker", api.Maker())
 	}
 
+	//币组
 	currencyRoute := e.Group("/api/:platform/v1/currency")
 	{
 		currencyRoute.GET("/currencyList", api.GetCurrencyList())
 	}
 
+	//用户组
 	userRoute := e.Group("/api/:platform/v1/user")
-
 	{
 		userRoute.POST("/register", api.Register())
 	}
+
+	//杂项组
 
 }
