@@ -36,6 +36,7 @@ func Success(data interface{}) map[string]interface{} {
 	return map[string]interface{}{"code": "0", "msg": "success", "data": data}
 }
 
+// 分页初始化
 func PageInit(data interface{}, page, count, perPage int) map[string]interface{} {
 	//总条数 除以 每页条数 = 总页数
 	//如果有余数 则总页数+1

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	. "peak-exchange/model"
 	"peak-exchange/utils"
+	"strconv"
 )
 
 func GetOrderBook() gin.HandlerFunc {
@@ -32,6 +33,11 @@ func GetOrderByNo() gin.HandlerFunc {
 // 根据用户ID查询挂单簿
 func GetOrderBookByUserId() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		userId := ctx.GetInt("userId")
+		//默认参数  第一页 每页10条
+		pNo, _ := strconv.Atoi(ctx.DefaultQuery("pageNo", "0"))
+		pSize, _ := strconv.Atoi(ctx.DefaultQuery("pageSize", "10"))
+		fmt.Printf("默认参数: %d %d %d", userId, pNo, pSize)
 		ctx.JSON(http.StatusOK, gin.H{"message": "根据用户信息查询挂单簿"})
 	}
 }

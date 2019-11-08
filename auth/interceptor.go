@@ -23,6 +23,7 @@ func Authorize() gin.HandlerFunc {
 			if err != nil {
 				fmt.Println("token解析校验失败:", claims)
 			}
+			ctx.Set("userId", 123456)
 			ctx.Next()
 		}
 	}

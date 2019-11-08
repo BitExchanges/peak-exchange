@@ -14,7 +14,7 @@ func SetInterfaces(e *gin.Engine) {
 	{
 		orderRoute.GET("/getOrderBook", api.GetOrderBook())
 		orderRoute.GET("/getOrderByNo/:orderNo", api.GetOrderByNo())
-		orderRoute.GET("/getOrderByUserId/:userId", api.GetOrderBookByUserId())
+		orderRoute.GET("/getOrderByUserId", api.GetOrderBookByUserId())
 		orderRoute.POST("/taker", api.Maker())
 	}
 

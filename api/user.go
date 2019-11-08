@@ -15,7 +15,7 @@ func Register() gin.HandlerFunc {
 		var user User
 		err := ctx.BindJSON(&user)
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, utils.BuildError("10001").Error())
+			ctx.JSON(http.StatusBadRequest, utils.BuildError("10001", "用户解析失败"))
 		} else {
 			generateToken(ctx, user)
 			//TODO 写入数据库
@@ -38,7 +38,7 @@ func generateToken(ctx *gin.Context, user User) {
 	// 创建token
 	token, err := j.CreateToken(claims)
 	if err != nil {
-		ctx.JSON(http.StatusOK, utils.BuildError("10002").Error())
+		ctx.JSON(http.StatusOK, utils.BuildError("10001", "token创建失败"))
 		return
 	}
 	ctx.JSON(http.StatusOK, utils.Success(token))
