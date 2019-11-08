@@ -1,1 +1,1 @@
-[GIN] 2019/11/08 - 14:07:18 | 200 |     489.614µs |             ::1 | POST     /api/test/v1/user/register
+[GIN] 2019/11/08 - 14:22:18 | 200 |     153.333µs |             ::1 | GET      /api/test/v1/currency/currencyList

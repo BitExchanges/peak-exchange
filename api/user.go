@@ -18,10 +18,12 @@ func Register() gin.HandlerFunc {
 			ctx.JSON(http.StatusBadRequest, utils.BuildError("10001").Error())
 		} else {
 			generateToken(ctx, user)
+			//TODO 写入数据库
 		}
 	}
 }
 
+// 创建token
 func generateToken(ctx *gin.Context, user User) {
 	j := auth.NewJwt()
 	claims := auth.Claims{
@@ -40,4 +42,11 @@ func generateToken(ctx *gin.Context, user User) {
 		return
 	}
 	ctx.JSON(http.StatusOK, utils.Success(token))
+}
+
+// 登录
+func Login() gin.HandlerFunc {
+	return func(context *gin.Context) {
+
+	}
 }

@@ -22,6 +22,7 @@ type Claims struct {
 }
 
 // JWT认证
+// TODO decrepted
 func JwtAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.Request.Header.Get("token")

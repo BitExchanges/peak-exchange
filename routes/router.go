@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"peak-exchange/api"
+	"peak-exchange/auth"
 )
 
 func SetInterfaces(e *gin.Engine) {
@@ -12,6 +13,7 @@ func SetInterfaces(e *gin.Engine) {
 	// 用户组  userRoute
 	// 交易组  tradeRoute
 	orderRoute := e.Group("/api/:platform/v1/order")
+	orderRoute.Use(auth.Authorize())
 	{
 		orderRoute.GET("/getOrderBook", api.GetOrderBook())
 		orderRoute.GET("/getOrderByNo/:orderNo", api.GetOrderByNo())
@@ -21,10 +23,11 @@ func SetInterfaces(e *gin.Engine) {
 
 	currencyRoute := e.Group("/api/:platform/v1/currency")
 	{
-		currencyRoute.GET("/currencyList")
+		currencyRoute.GET("/currencyList", api.GetCurrencyList())
 	}
 
 	userRoute := e.Group("/api/:platform/v1/user")
+
 	{
 		userRoute.POST("/register", api.Register())
 	}
