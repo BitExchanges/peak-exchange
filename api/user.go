@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"peak-exchange/auth"
 	. "peak-exchange/model"
+	"peak-exchange/service"
 	"peak-exchange/utils"
 	"time"
 )
@@ -19,6 +20,7 @@ func Register() gin.HandlerFunc {
 		} else {
 			generateToken(ctx, user)
 			//TODO 写入数据库
+			service.Save(user)
 		}
 	}
 }

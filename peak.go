@@ -16,7 +16,7 @@ import (
 
 func main() {
 
-	//initialize()
+	initialize()
 	//记录日志
 	f, _ := os.Create("peak.log")
 	//仅将日志写入文件
@@ -54,5 +54,5 @@ func main() {
 func initialize() {
 	config.InitEnv()
 	utils.InitMainDB()
-	utils.InitRedisPools()
+	//utils.InitRedisPools()
 }

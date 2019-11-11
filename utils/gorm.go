@@ -20,10 +20,10 @@ type GormDB struct {
 
 func getConnectionString(config *ConfigEnv, name string) string {
 	host := config.Get(envConfig.CurrentEnv.Model+"."+name+".host", "")
-	port := config.Get(envConfig.CurrentEnv.Model+"."+name+"port", "")
-	user := config.Get(envConfig.CurrentEnv.Model+"."+name+"username", "")
-	passwd := config.Get(envConfig.CurrentEnv.Model+"."+name+"password", "")
-	dbname := config.Get(envConfig.CurrentEnv.Model+"."+name+"database", "")
+	port := config.Get(envConfig.CurrentEnv.Model+"."+name+".port", "")
+	user := config.Get(envConfig.CurrentEnv.Model+"."+name+".username", "")
+	passwd := config.Get(envConfig.CurrentEnv.Model+"."+name+".password", "")
+	dbname := config.Get(envConfig.CurrentEnv.Model+"."+name+".database", "")
 	protocol := config.Get(envConfig.CurrentEnv.Model+"."+name+".protocol", "tcp")
 	dbargs := config.Get(envConfig.CurrentEnv.Model+"."+name+".dbargs", " ")
 	if strings.Trim(dbargs, " ") != "" {
@@ -38,7 +38,7 @@ func getConnectionString(config *ConfigEnv, name string) string {
 func InitMainDB() {
 	config := getDatabaseConfig()
 	var connStr = getConnectionString(config, "main")
-	db, err := gorm.Open(connStr)
+	db, err := gorm.Open("mysql", connStr)
 	if err != nil {
 		panic(err)
 	}
