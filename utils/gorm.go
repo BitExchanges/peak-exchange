@@ -3,6 +3,7 @@ package utils
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	envConfig "peak-exchange/config"
 	"strings"
@@ -47,6 +48,8 @@ func InitMainDB() {
 	db.DB().SetMaxOpenConns(config.GetInt(envConfig.CurrentEnv.Model+".main.maxopen", 0))
 	du, _ := time.ParseDuration(config.Get(envConfig.CurrentEnv.Model+".main.timeout", "3600") + "s")
 	db.DB().SetConnMaxLifetime(du)
+	//不使用复数
+	db.SingularTable(true)
 	db.Exec("set transaction isolation level repeatable read")
 	MainDb = db
 }
@@ -96,7 +99,7 @@ func (c *GormDB) DbCommit() {
 	if c.gdbDone {
 		return
 	}
-	tx := c.Rollback()
+	tx := c.Commit()
 	c.gdbDone = true
 	if err := tx.Error; err != nil && err != sql.ErrTxDone {
 		panic(err)

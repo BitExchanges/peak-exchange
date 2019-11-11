@@ -19,7 +19,6 @@ func Register() gin.HandlerFunc {
 			ctx.JSON(http.StatusBadRequest, utils.BuildError("10001", "用户解析失败"))
 		} else {
 			generateToken(ctx, user)
-			//TODO 写入数据库
 			service.Save(user)
 		}
 	}
