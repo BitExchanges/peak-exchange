@@ -18,8 +18,14 @@ func Register() gin.HandlerFunc {
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, utils.BuildError("10001", "用户解析失败"))
 		} else {
-			generateToken(ctx, user)
-			service.Save(user)
+			userId, err := service.Save(user)
+			if err != nil {
+				ctx.JSON(http.StatusOK, utils.BuildError("10002", err.Error()))
+			} else {
+				user.Id = userId
+				generateToken(ctx, user)
+			}
+
 		}
 	}
 }

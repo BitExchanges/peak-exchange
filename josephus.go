@@ -3,6 +3,7 @@ package main
 import (
 	"container/ring"
 	"fmt"
+	"peak-exchange/utils"
 )
 
 func main() {
@@ -36,6 +37,8 @@ func main() {
 			counter = 0
 		}
 	}
+
+	fmt.Println("雪花算法:", utils.GenerateSnowflakeId())
 
 }
 

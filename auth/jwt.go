@@ -15,6 +15,7 @@ var (
 
 type Claims struct {
 	Mobile string `json:"mobile"`
+	Id     int    `json:"id"`
 	jwt.StandardClaims
 }
 

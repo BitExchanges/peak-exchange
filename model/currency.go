@@ -12,8 +12,8 @@ type Currency struct {
 	Erc20       bool   `json:"erc20"`
 	Erc23       bool   `json:"erc23"`
 	Visible     bool   `json:"visible"`
-	Tradable    bool   `json:"tradable"`
-	Depositable bool   `json:"depositable"`
+	Tradeable   bool   `json:"trade_able"`
+	Depositable bool   `json:"deposit_able"`
 }
 
 var AllCurrencies []Currency

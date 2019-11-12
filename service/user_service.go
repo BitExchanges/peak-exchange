@@ -1,21 +1,22 @@
 package service
 
 import (
-	"fmt"
+	"errors"
 	. "peak-exchange/model"
 	"peak-exchange/utils"
 	"reflect"
 )
 
-func Save(user User) {
+func Save(user User) (int, error) {
 	DB := utils.MainDbBegin()
 	defer DB.DbCommit()
 
 	result := SelectUserByMobile(user.Mobile)
 	if reflect.DeepEqual(result, User{}) {
 		DB.Create(&user)
+		return user.Id, nil
 	} else {
-		fmt.Println("用户已存在")
+		return 0, errors.New("用户已存在")
 	}
 
 }
