@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	. "peak-exchange/model"
+	"peak-exchange/service"
 	"peak-exchange/utils"
 	"strconv"
 )
@@ -50,6 +51,7 @@ func Maker() gin.HandlerFunc {
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"message": err})
 		} else {
+			service.SaveOrder(order)
 			ctx.JSON(http.StatusOK, gin.H{"message": "挂单"})
 		}
 

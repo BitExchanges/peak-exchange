@@ -48,6 +48,8 @@ func InitMainDB() {
 	db.DB().SetMaxOpenConns(config.GetInt(envConfig.CurrentEnv.Model+".main.maxopen", 0))
 	du, _ := time.ParseDuration(config.Get(envConfig.CurrentEnv.Model+".main.timeout", "3600") + "s")
 	db.DB().SetConnMaxLifetime(du)
+	//开启日志
+	db.LogMode(true)
 	//不使用复数
 	db.SingularTable(true)
 	db.Exec("set transaction isolation level repeatable read")

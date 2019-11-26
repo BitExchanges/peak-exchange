@@ -3,14 +3,13 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"peak-exchange/api"
-	"peak-exchange/auth"
 )
 
 func SetInterfaces(e *gin.Engine) {
 
 	// 订单组
 	orderRoute := e.Group("/api/:platform/v1/order")
-	orderRoute.Use(auth.Authorize())
+	//orderRoute.Use(auth.Authorize())
 	{
 		orderRoute.GET("/getOrderBook", api.GetOrderBook())
 		orderRoute.GET("/getOrderByNo/:orderNo", api.GetOrderByNo())

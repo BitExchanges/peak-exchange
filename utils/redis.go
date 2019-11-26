@@ -21,6 +21,7 @@ func InitRedisPools() {
 	TickerPool = newRedisPool("ticker")
 	KLinePool = newRedisPool("k")
 	LimitPool = newRedisPool("limit")
+
 }
 
 // 关闭连接池
@@ -97,4 +98,15 @@ func newRedisPool(redisName string) *redis.Pool {
 			return err
 		},
 	}
+}
+
+type SubscribeCallback func(channel, message string)
+
+type Subscriber struct {
+	client redis.PubSubConn
+	cbMap  map[string]SubscribeCallback
+}
+
+func Publish() {
+
 }
