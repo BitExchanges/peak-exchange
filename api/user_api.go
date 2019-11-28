@@ -23,6 +23,11 @@ func Register() gin.HandlerFunc {
 			user.Level = "1"
 			user.Avatar = "example.png"
 			user.UUID = strconv.Itoa(int(time.Now().Unix()))
+			user.KycLevel = "0"
+			user.CreateAt = time.Now()
+			user.UpdateAt = time.Now()
+			user.LastLoginAt = time.Now()
+			user.LastLoginIp = ctx.ClientIP()
 			//校验用户信息
 			err = ValidateStruct(user)
 			if err != nil {
@@ -44,8 +49,8 @@ func Register() gin.HandlerFunc {
 			} else {
 				user.Id = userId
 				token, err := generateToken(user)
-				if err != nil {
-
+				if err == nil {
+					ctx.JSON(http.StatusOK, Success(token))
 				}
 			}
 		}

@@ -28,7 +28,7 @@ func main() {
 	router := gin.Default()
 	routes.SetInterfaces(router)
 	srv := &http.Server{
-		Addr:    ":8080",
+		Addr:    "192.168.0.106:8080",
 		Handler: router,
 	}
 
