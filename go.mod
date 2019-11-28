@@ -12,5 +12,6 @@ require (
 	github.com/kylelemons/go-gypsy v0.0.0-20160905020020-08cad365cd28
 	github.com/shopspring/decimal v0.0.0-20191009025716-f1972eb1d1f5
 	github.com/streadway/amqp v0.0.0-20190827072141-edfb9018d271
+	golang.org/x/tools v0.0.0-20191127201027-ecd32218bd7f // indirect
 	gopkg.in/yaml.v2 v2.2.2
 )

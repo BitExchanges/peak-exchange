@@ -11,7 +11,7 @@ import (
 func Authorize() gin.HandlerFunc {
 
 	return func(ctx *gin.Context) {
-		token := ctx.Request.Header.Get("token")
+		token := ctx.GetHeader("token")
 		if token == "" {
 			ctx.JSON(http.StatusOK, utils.Response{Head: map[string]string{"code": "10000", "msg": "token认证失败"}})
 			ctx.Abort()

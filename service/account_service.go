@@ -16,7 +16,17 @@ func SelectUserAccount(typ, userId int, currency string) (account Account) {
 	return account
 }
 
+// 查询用户当前账户列表
+func SelectUserAccountList(userId int) (accountList []Account) {
+	db := utils.MainDbBegin()
+	defer db.DbCommit()
+	db.Where("user_id=?", userId).Find(&accountList)
+	return accountList
+}
+
 // 创建账户
 func SaveAccount(account Account) {
-
+	db := utils.MainDbBegin()
+	defer db.Commit()
+	db.Create(&account)
 }

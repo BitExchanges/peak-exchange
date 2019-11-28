@@ -16,6 +16,7 @@ type Account struct {
 	Balance    float64 `json:"balance" gorm:"type:decimal(24,12)"` //当前资金
 	Locked     float64 `json:"locked" gorm:"type:decimal(24,12)"`  //冻结资金
 	Type       int     `json:"type"`                               //类型 0真实资金 1虚拟资金
+	Sn         string  `json:"sn"`                                 //加密防篡改
 }
 
 // 创建虚拟账户

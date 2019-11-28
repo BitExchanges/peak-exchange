@@ -10,8 +10,10 @@ func GetAccount() gin.HandlerFunc {
 }
 
 // 创建账户
-func Save() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-
-	}
-}
+//func CreateAccount() gin.HandlerFunc {
+//	return func(ctx *gin.Context) {
+//		token := ctx.GetHeader("token")
+//		//TODO token解析
+//
+//	}
+//}

@@ -18,14 +18,18 @@ func Register() gin.HandlerFunc {
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, utils.BuildError("10001", "用户解析失败"))
 		} else {
+
+			//创建用户信息
 			userId, err := service.Save(user)
+			//创建虚拟账户
+			account := CreateVirtualAccount(userId)
+			service.SaveAccount(*account)
 			if err != nil {
 				ctx.JSON(http.StatusOK, utils.BuildError("10002", err.Error()))
 			} else {
 				user.Id = userId
 				generateToken(ctx, user)
 			}
-
 		}
 	}
 }
@@ -35,6 +39,7 @@ func generateToken(ctx *gin.Context, user User) {
 	j := auth.NewJwt()
 	claims := auth.Claims{
 		Mobile: user.Mobile,
+		Id:     user.Id,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: int64(time.Now().Unix() - 1000), //签名生效时间
 			ExpiresAt: int64(time.Now().Unix() + 3600), //过期时间一小时

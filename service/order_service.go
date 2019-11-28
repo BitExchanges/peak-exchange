@@ -10,7 +10,6 @@ import (
 
 // 创建订单
 func SaveOrder(order Order) {
-
 	orderNo := strconv.FormatInt(GenerateSnowflakeId(), 10)
 	order.OrderNo = orderNo
 	order.CreateAt = time.Now()
@@ -20,5 +19,9 @@ func SaveOrder(order Order) {
 	defer DB.DbRollback()
 	result := DB.Create(&order)
 	fmt.Println(result.RowsAffected)
-
 }
+
+//func SelectOrderList(userId int)(orderList []Order)  {
+//	db:=MainDbBegin()
+//	db.Where()
+//}

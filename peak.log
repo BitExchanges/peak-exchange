@@ -1,3 +1,7 @@
-[GIN] 2019/11/26 - 13:26:46 | 200 |   20.328508ms |             ::1 | POST     /api/peak/v1/order/taker
-[GIN] 2019/11/26 - 13:26:52 | 200 |    8.525846ms |             ::1 | POST     /api/peak/v1/order/taker
-[GIN] 2019/11/26 - 13:27:00 | 200 |    7.388857ms |             ::1 | POST     /api/peak/v1/order/taker
+[GIN] 2019/11/28 - 14:09:03 | 404 |       2.836µs |             ::1 | POST     /api/exchange/v1/user/ergister
+[GIN] 2019/11/28 - 14:09:22 | 200 |  3.235222142s |             ::1 | POST     /api/exchange/v1/user/register
+[GIN] 2019/11/28 - 14:11:40 | 200 |    2.554873ms |             ::1 | POST     /api/exchange/v1/user/register
+[GIN] 2019/11/28 - 14:12:36 | 200 |    9.721438ms |             ::1 | POST     /api/exchange/v1/user/register
+[GIN] 2019/11/28 - 14:13:24 | 200 | 30.977627896s |             ::1 | POST     /api/exchange/v1/user/register
+[GIN] 2019/11/28 - 14:13:41 | 200 |    4.228898ms |             ::1 | POST     /api/exchange/v1/user/register
+[GIN] 2019/11/28 - 14:13:50 | 200 |   10.846879ms |             ::1 | POST     /api/exchange/v1/user/register
