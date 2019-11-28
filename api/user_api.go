@@ -8,6 +8,7 @@ import (
 	. "peak-exchange/model"
 	"peak-exchange/service"
 	"peak-exchange/utils"
+	"strconv"
 	"time"
 )
 
@@ -18,6 +19,10 @@ func Register() gin.HandlerFunc {
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, utils.BuildError("10001", "用户解析失败"))
 		} else {
+
+			user.Level = "1"
+			user.Avatar = "example.png"
+			user.UUID = strconv.Itoa(int(time.Now().Unix() / 1000))
 			//校验用户信息
 			utils.ValidateStruct(user)
 			if err != nil {
