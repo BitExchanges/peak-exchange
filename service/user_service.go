@@ -14,6 +14,7 @@ func Save(user User) (int, error) {
 	result := SelectUserByMobile(user.Mobile)
 	if reflect.DeepEqual(result, User{}) {
 		DB.Create(&user)
+
 		return user.Id, nil
 	} else {
 		return 0, errors.New("用户已存在")
