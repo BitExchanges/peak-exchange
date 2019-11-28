@@ -1,5 +1,13 @@
 package utils
 
+const (
+	AccessDenied = "10001" //无访问权限
+	NotFound     = "10002" //暂无数据
+	ParamError   = "10003" //参数错误
+	IllegalToken = "10004" //非法token
+	OperateError = "10005" //操作失败
+)
+
 type Response struct {
 	Head map[string]string `json:"head"`
 	Body interface{}       `json:"body"`

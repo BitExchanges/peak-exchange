@@ -7,7 +7,7 @@ import (
 	"peak-exchange/auth"
 	. "peak-exchange/model"
 	"peak-exchange/service"
-	"peak-exchange/utils"
+	. "peak-exchange/utils"
 	"strconv"
 	"time"
 )
@@ -17,19 +17,19 @@ func Register() gin.HandlerFunc {
 		var user User
 		err := ctx.BindJSON(&user)
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, utils.BuildError("10001", "用户解析失败"))
+			ctx.JSON(http.StatusBadRequest, BuildError(ParamError, "参数错误"))
 		} else {
 
 			user.Level = "1"
 			user.Avatar = "example.png"
 			user.UUID = strconv.Itoa(int(time.Now().Unix()))
 			//校验用户信息
-			err = utils.ValidateStruct(user)
+			err = ValidateStruct(user)
 			if err != nil {
-				ctx.JSON(http.StatusOK, utils.BuildError("10003", err.Error()))
+				ctx.JSON(http.StatusOK, BuildError(ParamError, err.Error()))
 				return
 			}
-			user.LoginPwd = utils.MD5Pwd(user.LoginPwd)
+			user.LoginPwd = MD5Pwd(user.LoginPwd)
 
 			//创建用户信息
 			userId, err := service.Save(user)
@@ -40,17 +40,20 @@ func Register() gin.HandlerFunc {
 			}
 
 			if err != nil {
-				ctx.JSON(http.StatusOK, utils.BuildError("10002", err.Error()))
+				ctx.JSON(http.StatusOK, BuildError(OperateError, err.Error()))
 			} else {
 				user.Id = userId
-				generateToken(ctx, user)
+				token, err := generateToken(user)
+				if err != nil {
+
+				}
 			}
 		}
 	}
 }
 
 // 创建token
-func generateToken(ctx *gin.Context, user User) {
+func generateToken(user User) (string, error) {
 	j := auth.NewJwt()
 	claims := auth.Claims{
 		Mobile: user.Mobile,
@@ -65,10 +68,9 @@ func generateToken(ctx *gin.Context, user User) {
 	// 创建token
 	token, err := j.CreateToken(claims)
 	if err != nil {
-		ctx.JSON(http.StatusOK, utils.BuildError("10001", "token创建失败"))
-		return
+		return "", err
 	}
-	ctx.JSON(http.StatusOK, utils.Success(token))
+	return token, nil
 }
 
 // 登录

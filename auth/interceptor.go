@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"peak-exchange/utils"
+	. "peak-exchange/utils"
 )
 
 // 认证处理
@@ -13,7 +13,7 @@ func Authorize() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("token")
 		if token == "" {
-			ctx.JSON(http.StatusOK, utils.Response{Head: map[string]string{"code": "10000", "msg": "token认证失败"}})
+			ctx.JSON(http.StatusOK, BuildError(AccessDenied, "暂无权限"))
 			ctx.Abort()
 			return
 		} else {
@@ -21,7 +21,9 @@ func Authorize() gin.HandlerFunc {
 			j := NewJwt()
 			claims, err := j.ParseToken(token)
 			if err != nil {
-				fmt.Println("token解析校验失败:", claims)
+				ctx.JSON(http.StatusOK, BuildError(IllegalToken, "非法token"))
+				fmt.Println("token 非法:", claims)
+				return
 			}
 			ctx.Set("userId", claims.Id)
 			ctx.Next()

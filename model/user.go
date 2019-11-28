@@ -2,7 +2,7 @@ package model
 
 type User struct {
 	//CommonModel
-	Id           int    `json:"id"`                                   //ID
+	Id           int    `json:"-"`                                    //ID
 	UUID         string `json:"uuid"`                                 //UUID 短号
 	NickName     string `json:"nick_name"`                            //昵称
 	Name         string `json:"name"`                                 //姓名
