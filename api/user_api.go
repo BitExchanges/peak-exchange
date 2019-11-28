@@ -22,13 +22,14 @@ func Register() gin.HandlerFunc {
 
 			user.Level = "1"
 			user.Avatar = "example.png"
-			user.UUID = strconv.Itoa(int(time.Now().Unix() / 1000))
+			user.UUID = strconv.Itoa(int(time.Now().Unix()))
 			//校验用户信息
-			utils.ValidateStruct(user)
+			err = utils.ValidateStruct(user)
 			if err != nil {
 				ctx.JSON(http.StatusOK, utils.BuildError("10003", err.Error()))
 				return
 			}
+			user.LoginPwd = utils.MD5Pwd(user.LoginPwd)
 
 			//创建用户信息
 			userId, err := service.Save(user)
