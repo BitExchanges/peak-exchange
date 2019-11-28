@@ -8,6 +8,7 @@ import (
 	"peak-exchange/service"
 	"peak-exchange/utils"
 	"strconv"
+	"strings"
 )
 
 func GetOrderBook() gin.HandlerFunc {
@@ -51,6 +52,8 @@ func Maker() gin.HandlerFunc {
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"message": err})
 		} else {
+
+			strings.TrimSpace(ctx.ClientIP())
 			service.SaveOrder(order)
 			ctx.JSON(http.StatusOK, gin.H{"message": "挂单"})
 		}

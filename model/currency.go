@@ -4,16 +4,17 @@ import "peak-exchange/utils"
 
 type Currency struct {
 	CommonModel
+	Id          int    `json:"id" gorm:"primary_key"` //主键
 	Key         string `json:"key"`
 	Code        string `json:"code"`
 	Symbol      string `json:"symbol"`
 	Coin        string `json:"coin"`
-	Precision   int    `json:"precision"`
-	Erc20       bool   `json:"erc20"`
-	Erc23       bool   `json:"erc23"`
-	Visible     bool   `json:"visible"`
-	Tradeable   bool   `json:"trade_able"`
-	Depositable bool   `json:"deposit_able"`
+	Precision   int    `json:"precision"`    //精度
+	Erc20       bool   `json:"erc20"`        //erc20
+	Erc23       bool   `json:"erc23"`        //erc23
+	Visible     bool   `json:"visible"`      //可见
+	Tradeable   bool   `json:"trade_able"`   //允许交易
+	Depositable bool   `json:"deposit_able"` //
 }
 
 var AllCurrencies []Currency
