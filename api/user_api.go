@@ -18,12 +18,21 @@ func Register() gin.HandlerFunc {
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, utils.BuildError("10001", "用户解析失败"))
 		} else {
+			//校验用户信息
+			utils.ValidateStruct(user)
+			if err != nil {
+				ctx.JSON(http.StatusOK, utils.BuildError("10003", err.Error()))
+				return
+			}
 
 			//创建用户信息
 			userId, err := service.Save(user)
 			//创建虚拟账户
-			account := CreateVirtualAccount(userId)
-			service.SaveAccount(*account)
+			if userId != 0 {
+				account := CreateVirtualAccount(userId)
+				service.SaveAccount(*account)
+			}
+
 			if err != nil {
 				ctx.JSON(http.StatusOK, utils.BuildError("10002", err.Error()))
 			} else {
