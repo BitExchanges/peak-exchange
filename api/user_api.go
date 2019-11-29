@@ -57,6 +57,50 @@ func Register() gin.HandlerFunc {
 	}
 }
 
+// 登录
+func Login() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var user User
+		err := ctx.BindJSON(&user)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, BuildError(ParamError, "参数错误"))
+		} else {
+			//TODO 校验用户名密码
+			retUser := service.SelectUserByMobile(user.Mobile)
+			if (User{}) == retUser {
+				ctx.JSON(http.StatusOK, BuildError(UserNotFound, "用户不存在"))
+				return
+			} else {
+				encrypt := MD5Pwd(user.LoginPwd)
+				if encrypt != retUser.LoginPwd {
+					ctx.JSON(http.StatusOK, BuildError(UserNameOrPwdError, "用户名或密码错误"))
+					return
+				} else {
+					retUser.LastLoginIp = ctx.ClientIP()
+					retUser.LastLoginAt = time.Now()
+					service.UpdateUser(retUser)
+					token, _ := generateToken(retUser)
+					ctx.JSON(http.StatusOK, Success(token))
+				}
+			}
+		}
+	}
+}
+
+// 修改用户信息
+func UpdateProfile() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+
+	}
+}
+
+// 退出登录
+func Logout() gin.HandlerFunc {
+	return func(context *gin.Context) {
+
+	}
+}
+
 // 创建token
 func generateToken(user User) (string, error) {
 	j := auth.NewJwt()
@@ -76,11 +120,4 @@ func generateToken(user User) (string, error) {
 		return "", err
 	}
 	return token, nil
-}
-
-// 登录
-func Login() gin.HandlerFunc {
-	return func(context *gin.Context) {
-
-	}
 }

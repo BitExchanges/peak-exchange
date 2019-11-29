@@ -1,11 +1,13 @@
 package utils
 
 const (
-	AccessDenied = "10001" //无访问权限
-	NotFound     = "10002" //暂无数据
-	ParamError   = "10003" //参数错误
-	IllegalToken = "10004" //非法token
-	OperateError = "10005" //操作失败
+	AccessDenied       = "10001" //无访问权限
+	NotFound           = "10002" //暂无数据
+	ParamError         = "10003" //参数错误
+	IllegalToken       = "10004" //非法token
+	OperateError       = "10005" //操作失败
+	UserNameOrPwdError = "10006" //用户名或密码错误
+	UserNotFound       = "10007" //用户不存在
 )
 
 type Response struct {

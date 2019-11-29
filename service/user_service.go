@@ -29,3 +29,10 @@ func SelectUserByMobile(mobile string) (user User) {
 	DB.Where("mobile=?", mobile).Find(&user)
 	return user
 }
+
+//更新用户信息
+func UpdateUser(user User) {
+	db := utils.MainDbBegin()
+	defer db.DbCommit()
+	db.Update(&user)
+}

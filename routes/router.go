@@ -28,6 +28,9 @@ func SetInterfaces(e *gin.Engine) {
 	userRoute := e.Group("/api/:platform/v1/user")
 	{
 		userRoute.POST("/register", api.Register())
+		userRoute.POST("/login", api.Login())
+		userRoute.POST("/updateProfile", api.UpdateProfile())
+		userRoute.POST("/logout", api.Logout())
 	}
 
 	//杂项组
