@@ -77,10 +77,10 @@ func Login() gin.HandlerFunc {
 					return
 				} else {
 					retUser.LastLoginIp = ctx.ClientIP()
-					retUser.LastLoginAt = time.Now()
 					service.UpdateUser(retUser)
 					token, _ := generateToken(retUser)
-					ctx.JSON(http.StatusOK, Success(token))
+					retUser.Token = token
+					ctx.JSON(http.StatusOK, Success(retUser))
 				}
 			}
 		}

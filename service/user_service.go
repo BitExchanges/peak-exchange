@@ -5,6 +5,7 @@ import (
 	. "peak-exchange/model"
 	"peak-exchange/utils"
 	"reflect"
+	"time"
 )
 
 func Save(user User) (int, error) {
@@ -26,7 +27,20 @@ func Save(user User) (int, error) {
 func SelectUserByMobile(mobile string) (user User) {
 	DB := utils.MainDbBegin()
 	defer DB.DbRollback()
-	DB.Where("mobile=?", mobile).Find(&user)
+	DB.Select([]string{
+		"uuid",
+		"nick_name",
+		"avatar",
+		"mobile",
+		"login_pwd",
+		"email",
+		"level",
+		"kyc_level",
+		"identity_card",
+		"card_type",
+		"last_login_at",
+		"last_login_ip",
+	}).Where("mobile=?", mobile).Find(&user)
 	return user
 }
 
@@ -34,5 +48,5 @@ func SelectUserByMobile(mobile string) (user User) {
 func UpdateUser(user User) {
 	db := utils.MainDbBegin()
 	defer db.DbCommit()
-	db.Update(&user)
+	db.Model(&user).Updates(map[string]interface{}{"last_login_at": time.Now(), "last_login_ip": user.LastLoginIp})
 }

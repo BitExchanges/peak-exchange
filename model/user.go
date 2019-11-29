@@ -19,4 +19,5 @@ type User struct {
 	CardType     int       `json:"card_type"`                            //证件类型
 	LastLoginAt  time.Time `json:"last_login_at"`                        //最后登录时间
 	LastLoginIp  string    `json:"last_login_ip"`                        //最后登录IP
+	Token        string    `json:"token" gorm:"-"`
 }

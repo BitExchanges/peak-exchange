@@ -32,7 +32,10 @@ func SetInterfaces(e *gin.Engine) {
 		userRoute.POST("/updateProfile", api.UpdateProfile())
 		userRoute.POST("/logout", api.Logout())
 	}
-
 	//杂项组
+	miscRoute := e.Group("/api/:platform/v1/misc")
+	{
+		miscRoute.POST("/sendEmail", api.SendEmailMsg())
+	}
 
 }
