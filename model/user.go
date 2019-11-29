@@ -22,7 +22,8 @@ type User struct {
 	CardType     int       `json:"card_type"`                            //证件类型
 	LastLoginAt  time.Time `json:"last_login_at"`                        //最后登录时间
 	LastLoginIp  string    `json:"last_login_ip"`                        //最后登录IP
-	Token        string    `json:"token" gorm:"-"`
+	Token        string    `json:"token" gorm:"-"`                       //token标识
+	Country      int       `json:"country"`                              //国家标识
 }
 
 // 常用地管理
