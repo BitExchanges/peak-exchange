@@ -37,6 +37,6 @@ type AuthLoginAddress struct {
 	CommonModel
 }
 
-func (user *User) SendEmail(subject string) {
-	utils.SendEmail("769558579@qq.com", user.Email, subject)
+func (user *User) SendEmail(typ int, ip string) {
+	utils.SendEmail("769558579@qq.com", user.Email, "异地登录通知", ip)
 }

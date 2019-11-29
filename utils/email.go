@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/jordan-wright/email"
 	"html/template"
 	"net/smtp"
@@ -12,9 +13,9 @@ import (
 // fromUser 发件人
 // toUser   收件人
 // subject  邮件主题
-func SendEmail(fromUser, toUser, subject string) error {
+func SendEmail(fromUser, toUser, subject, ip string) error {
 	e := email.NewEmail()
-	e.From = fromUser
+	e.From = fmt.Sprintf("Tony Pan <%s>", fromUser)
 	e.To = []string{toUser}
 	e.Subject = subject
 	t, err := template.ParseFiles("./email-template.html")
@@ -34,7 +35,7 @@ func SendEmail(fromUser, toUser, subject string) error {
 		"农民",
 		time.Now().Format("2006/01/02 15:04:05"),
 		"测试邮件",
-		"192.168.0.1",
+		ip,
 	})
 
 	e.HTML = body.Bytes()

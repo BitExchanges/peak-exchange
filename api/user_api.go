@@ -19,7 +19,6 @@ func Register() gin.HandlerFunc {
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, BuildError(ParamError, "参数错误"))
 		} else {
-
 			user.Level = "1"
 			user.Avatar = "example.png"
 			user.UUID = strconv.Itoa(int(time.Now().Unix()))
@@ -82,7 +81,8 @@ func Login() gin.HandlerFunc {
 					if (AuthLoginAddress{}) == loginAddress {
 						if retUser.Email != "" {
 							//TODO 将来需要通过消息中间件异步消息通知
-							go retUser.SendEmail("异地登录")
+
+							go retUser.SendEmail(0, ctx.ClientIP())
 						}
 					}
 					retUser.LastLoginIp = ctx.ClientIP()
