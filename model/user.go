@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"peak-exchange/utils"
+	"time"
+)
 
 type User struct {
 	CommonModel
@@ -20,4 +23,20 @@ type User struct {
 	LastLoginAt  time.Time `json:"last_login_at"`                        //最后登录时间
 	LastLoginIp  string    `json:"last_login_ip"`                        //最后登录IP
 	Token        string    `json:"token" gorm:"-"`
+}
+
+// 常用地管理
+type AuthLoginAddress struct {
+	Id        int       `json:"id"`         //主键
+	UserId    int       `json:"user_id"`    //用户ID
+	Address   string    `json:"address"`    //地址名称
+	IpAddress string    `json:"ip_address"` //IP
+	State     int       `json:"state"`      //状态  0-未确认  1-已确认
+	LoginType string    `json:"login_type"` //登录设备类型
+	LoginAt   time.Time `json:"login_at"`   //登录时间
+	CommonModel
+}
+
+func (user *User) SendEmail(subject string) {
+	utils.SendEmail("769558579@qq.com", user.Email, subject)
 }

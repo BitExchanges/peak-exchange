@@ -76,6 +76,15 @@ func Login() gin.HandlerFunc {
 					ctx.JSON(http.StatusOK, BuildError(UserNameOrPwdError, "用户名或密码错误"))
 					return
 				} else {
+
+					//检查登录IP是否在常用地址内
+					loginAddress := service.SelectAuthLoginAddressByUserId(retUser.Id, ctx.ClientIP())
+					if (AuthLoginAddress{}) == loginAddress {
+						if retUser.Email != "" {
+							//TODO 将来需要通过消息中间件异步消息通知
+							go retUser.SendEmail("异地登录")
+						}
+					}
 					retUser.LastLoginIp = ctx.ClientIP()
 					service.UpdateUser(retUser)
 					token, _ := generateToken(retUser)
@@ -113,7 +122,6 @@ func generateToken(user User) (string, error) {
 			Issuer:    "peak_exchange",                 //签名发行者
 		},
 	}
-
 	// 创建token
 	token, err := j.CreateToken(claims)
 	if err != nil {

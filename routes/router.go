@@ -34,8 +34,10 @@ func SetInterfaces(e *gin.Engine) {
 	}
 	//杂项组
 	miscRoute := e.Group("/api/:platform/v1/misc")
+	miscRoute.Use(auth.Authorize())
 	{
 		miscRoute.POST("/sendEmail", api.SendEmailMsg())
+		miscRoute.GET("/device", api.GetDeviceType())
 	}
 
 }

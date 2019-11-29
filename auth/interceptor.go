@@ -3,6 +3,7 @@ package auth
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/mssola/user_agent"
 	"net/http"
 	. "peak-exchange/utils"
 )
@@ -24,6 +25,14 @@ func Authorize() gin.HandlerFunc {
 				ctx.JSON(http.StatusOK, BuildError(IllegalToken, "非法token"))
 				fmt.Println("token 非法:", claims)
 				return
+			}
+			// 获取设备类型
+			userAgent := ctx.GetHeader("User-Agent")
+			agent := user_agent.New(userAgent)
+			if agent.Mobile() {
+				ctx.Set("device", "mobile")
+			} else {
+				ctx.Set("device", "web")
 			}
 			ctx.Set("userId", claims.Id)
 			ctx.Next()

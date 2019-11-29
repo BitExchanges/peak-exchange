@@ -28,6 +28,7 @@ func SelectUserByMobile(mobile string) (user User) {
 	DB := utils.MainDbBegin()
 	defer DB.DbRollback()
 	DB.Select([]string{
+		"id",
 		"uuid",
 		"nick_name",
 		"avatar",
@@ -49,4 +50,11 @@ func UpdateUser(user User) {
 	db := utils.MainDbBegin()
 	defer db.DbCommit()
 	db.Model(&user).Updates(map[string]interface{}{"last_login_at": time.Now(), "last_login_ip": user.LastLoginIp})
+}
+
+// 更新用户最后登录时间 以及登录IP
+func UpdateUserLogin(userId int, lastLoginAt time.Time, lastLoginIp string) {
+	db := utils.MainDbBegin()
+	defer db.DbCommit()
+	db.Exec("UPDATE user SET last_login_at=?,last_login_ip=? WHERE user_id=?", lastLoginAt, lastLoginIp, userId)
 }

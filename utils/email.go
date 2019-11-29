@@ -32,7 +32,7 @@ func SendEmail(fromUser, toUser, subject string) error {
 	}{
 		"农场主",
 		"农民",
-		time.Now().Format("2006/01/02"),
+		time.Now().Format("2006/01/02 15:04:05"),
 		"测试邮件",
 		"192.168.0.1",
 	})
