@@ -40,4 +40,9 @@ func SetInterfaces(e *gin.Engine) {
 		miscRoute.GET("/device", api.GetDeviceType())
 	}
 
+	blockRoute := e.Group("/api/:platform/v1/block")
+	{
+		blockRoute.GET("/getBlockHead", api.GetCurrentBlockHead())
+	}
+
 }

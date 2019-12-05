@@ -8,6 +8,8 @@ const (
 	OperateError       = "10005" //操作失败
 	UserNameOrPwdError = "10006" //用户名或密码错误
 	UserNotFound       = "10007" //用户不存在
+
+	BlockError = "20001" //区块错误
 )
 
 type Response struct {
