@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rpc"
 	"log"
@@ -48,4 +49,26 @@ func (t *Transfer) OutTransfer(fromAddress common.Address, toAddress string, amo
 	var data []byte
 	tx := types.NewTransaction(nonce, common.HexToAddress(toAddress), value, gasLimit, gasPrice, data)
 	return tx
+}
+
+// 交易签名并发送
+func (t *Transfer) SignTx(tx *types.Transaction, privateKeyStr string) *types.Transaction {
+	//字符串私钥转换为 ecdsa
+	privateKey, err := crypto.HexToECDSA(privateKeyStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//获取网络通道ID
+	chainId, err := t.client.NetworkID(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//对transaction做交易签名
+	signedTX, err := types.SignTx(tx, types.NewEIP155Signer(chainId), privateKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return signedTX
 }
