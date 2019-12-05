@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// 用户
 type User struct {
 	CommonModel
 	Id           int       `json:"-"`                                    //ID
@@ -35,6 +36,17 @@ type AuthLoginAddress struct {
 	State     int       `json:"state"`      //状态  0-未确认  1-已确认
 	LoginType string    `json:"login_type"` //登录设备类型
 	LoginAt   time.Time `json:"login_at"`   //登录时间
+	CommonModel
+}
+
+// 钱包
+type Wallet struct {
+	Id         int    `json:"id"`          //主键
+	UserId     int    `json:"user_id"`     //用户ID
+	Address    string `json:"address"`     //钱包地址
+	Currency   string `json:"currency"`    //币种
+	Type       string `json:"type"`        //类型 erc20 | omini |trc20
+	PrivateKey string `json:"private_key"` //私钥
 	CommonModel
 }
 

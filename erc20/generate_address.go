@@ -35,3 +35,14 @@ func GenerateAddress(count int) {
 		fmt.Printf("私钥: %s  地址: %s\n", v.privateKey, v.address)
 	}
 }
+
+// 生成私钥和地址
+func GenerateUserAddress() (key, add string) {
+	//生成私钥
+	privateKey, err := crypto.GenerateKey()
+	if err != nil {
+		log.Fatal(err)
+	}
+	address := crypto.PubkeyToAddress(privateKey.PublicKey)
+	return hex.EncodeToString(privateKey.D.Bytes()), address.Hex()
+}

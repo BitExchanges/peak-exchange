@@ -40,9 +40,16 @@ func SetInterfaces(e *gin.Engine) {
 		miscRoute.GET("/device", api.GetDeviceType())
 	}
 
+	//区块
 	blockRoute := e.Group("/api/:platform/v1/block")
 	{
 		blockRoute.GET("/getBlockHead", api.GetCurrentBlockHead())
+	}
+
+	//钱包
+	walletRoute := e.Group("/api/:platform/v1/wallet")
+	{
+		walletRoute.GET("/getWallet")
 	}
 
 }

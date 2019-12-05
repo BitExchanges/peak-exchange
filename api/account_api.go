@@ -17,3 +17,8 @@ func GetAccount() gin.HandlerFunc {
 //
 //	}
 //}
+
+// 充值
+func Recharge() {
+
+}

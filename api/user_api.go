@@ -12,6 +12,7 @@ import (
 	"time"
 )
 
+// 注册
 func Register() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var user User
