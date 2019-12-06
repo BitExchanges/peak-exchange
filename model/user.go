@@ -8,7 +8,7 @@ import (
 // 用户
 type User struct {
 	CommonModel
-	Id           int       `json:"-"`                                    //ID
+	ID           int       `json:"id"`                                   //ID
 	UUID         string    `json:"uuid"`                                 //UUID 短号
 	NickName     string    `json:"nick_name"`                            //昵称
 	Name         string    `json:"name"`                                 //姓名
@@ -48,6 +48,19 @@ type Wallet struct {
 	Type       string `json:"type"`        //类型 erc20 | omini |trc20
 	PrivateKey string `json:"private_key"` //私钥
 	CommonModel
+}
+
+// 生成新钱包
+func NewWallet(userId int, privateKey, address string) Wallet {
+	return Wallet{
+		Id:          0,
+		UserId:      userId,
+		Address:     address,
+		Currency:    "usd",
+		Type:        "erc20",
+		PrivateKey:  privateKey,
+		CommonModel: CommonModel{CreateAt: time.Now(), UpdateAt: time.Now()},
+	}
 }
 
 func (user *User) SendEmail(typ int, ip string) {

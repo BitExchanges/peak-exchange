@@ -37,7 +37,7 @@ func GenerateAddress(count int) {
 }
 
 // 生成私钥和地址
-func GenerateUserAddress() (key, add string) {
+func GenerateUserWallet() (key, add string) {
 	//生成私钥
 	privateKey, err := crypto.GenerateKey()
 	if err != nil {

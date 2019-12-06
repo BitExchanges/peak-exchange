@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>资产管理</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style type="text/css">
+        body{
+            background: #f4f4f4;
+        }
+
+        .content{
+            width: 900px;
+            margin: 0 auto;
+        }
+        .head {
+            height: 60px;
+            line-height: 60px;
+            background: #fff;
+        }
+
+        .currency_choose {
+            color: #f8f8f8;
+            float: left;
+            width: 100px;
+            margin: 0 9px;
+            border-radius: 2px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background-color: rgba(47, 39, 157, .9);
+            font-size: 13px;
+        }
+
+        .currency_choose:hover {
+            cursor: pointer;
+        }
+
+        .notice {
+            height: 80px;
+            margin-top: 30px;
+            background-color: #fdf9f2;
+            border: 1px solid #f3d9a9;
+        }
+
+        .head span {
+            display: inline-block;
+            padding-left: 40px;
+        }
+
+        .notice span{
+            font-size: 12px;
+            display: inline-block;
+            line-height: 80px;
+            padding-left: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <div class="head">
+        <span>币币账户</span>
+    </div>
+
+    <div class="notice">
+        <span>检查访问网址、开启二次验证、不要给声称是 [天堂币] 的工作人员转账或透露密码等信息。</span>
+    </div>
+    <div class="">
+        <div class="currency_choose">Erc20</div>
+        <div class="currency_choose">Omini</div>
+        <div class="currency_choose">Trc20</div>
+    </div>
+    <img src="data:image/png;base64,{{.qrcode}}" alt="erc20">
+
+</div>
+
+</body>
+
+</html>

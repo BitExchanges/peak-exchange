@@ -10,7 +10,7 @@ func SetInterfaces(e *gin.Engine) {
 
 	// 订单组
 	orderRoute := e.Group("/api/:platform/v1/order")
-	orderRoute.Use(auth.Authorize())
+	//orderRoute.Use(auth.Authorize())
 	{
 		orderRoute.GET("/getOrderBook", api.GetOrderBook())
 		orderRoute.GET("/getOrderByNo/:orderNo", api.GetOrderByNo())
@@ -50,6 +50,12 @@ func SetInterfaces(e *gin.Engine) {
 	walletRoute := e.Group("/api/:platform/v1/wallet")
 	{
 		walletRoute.GET("/getWallet")
+	}
+
+	templateRoute := e.Group("/template")
+	{
+		templateRoute.GET("/login", api.LoginIndex())
+		templateRoute.GET("/index", api.Index())
 	}
 
 }

@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"peak-exchange/erc20"
 	. "peak-exchange/model"
 	"peak-exchange/utils"
 	"reflect"
@@ -57,4 +58,13 @@ func UpdateUserLogin(userId int, lastLoginAt time.Time, lastLoginIp string) {
 	db := utils.MainDbBegin()
 	defer db.DbCommit()
 	db.Exec("UPDATE user SET last_login_at=?,last_login_ip=? WHERE user_id=?", lastLoginAt, lastLoginIp, userId)
+}
+
+// 保存用户钱包地址
+func SaveWalletAddress(userId int) {
+	db := utils.MainDbBegin()
+	defer db.DbCommit()
+	privateKey, Address := erc20.GenerateUserWallet()
+	wallet := NewWallet(userId, privateKey, Address)
+	db.Create(&wallet)
 }

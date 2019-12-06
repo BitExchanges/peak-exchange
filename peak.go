@@ -24,11 +24,13 @@ func main() {
 
 	//同时将日志写入文件和控制台
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
+	router.LoadHTMLGlob("static/*")
 	routes.SetInterfaces(router)
 	srv := &http.Server{
-		Addr:    "192.168.0.101:8080",
+		Addr:    ":8080",
 		Handler: router,
 	}
 
