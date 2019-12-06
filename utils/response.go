@@ -49,7 +49,7 @@ func Success(data interface{}) map[string]interface{} {
 }
 
 // 分页初始化
-func PageInit(data interface{}, page, count, perPage int) map[string]interface{} {
+func (pageResponse *PageResponse) PageInit(data interface{}, page, count, perPage int) map[string]interface{} {
 	//总条数 除以 每页条数 = 总页数
 	//如果有余数 则总页数+1
 	totalPage := count / perPage

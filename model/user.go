@@ -41,7 +41,7 @@ type AuthLoginAddress struct {
 
 // 钱包
 type Wallet struct {
-	Id         int    `json:"id"`          //主键
+	ID         int    `json:"id"`          //主键
 	UserId     int    `json:"user_id"`     //用户ID
 	Address    string `json:"address"`     //钱包地址
 	Currency   string `json:"currency"`    //币种
@@ -53,7 +53,7 @@ type Wallet struct {
 // 生成新钱包
 func NewWallet(userId int, privateKey, address string) Wallet {
 	return Wallet{
-		Id:          0,
+		ID:          0,
 		UserId:      userId,
 		Address:     address,
 		Currency:    "usd",

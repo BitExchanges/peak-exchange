@@ -50,6 +50,8 @@ func SetInterfaces(e *gin.Engine) {
 	walletRoute := e.Group("/api/:platform/v1/wallet")
 	{
 		walletRoute.GET("/getWallet")
+		walletRoute.GET("/addressList", api.GetAddressList())
+		walletRoute.GET("/batchAddress", api.BatchGenerateAddress())
 	}
 
 	templateRoute := e.Group("/template")
