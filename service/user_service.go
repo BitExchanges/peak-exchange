@@ -68,3 +68,43 @@ func SaveWalletAddress(userId int) {
 	wallet := NewWallet(userId, privateKey, Address)
 	db.Create(&wallet)
 }
+
+// 用户注册
+func UserRegister(user User) error {
+
+	db := utils.MainDbBegin()
+	//添加用户信息
+	var count int
+	db.Where("mobile=? and state=?").Count(&count)
+	if count > 0 {
+		return errors.New("用户已存在")
+	}
+
+	if db.Create(user).Error != nil {
+		return errors.New("创建用户失败")
+	}
+
+	//创建虚拟账户信息
+	virtualAccount := CreateVirtualAccount(user.ID)
+	if db.Create(virtualAccount).Error != nil {
+		db.DbRollback()
+		return errors.New("创建用户账户信息失败")
+	}
+
+	//创建真实账户
+	realAccount := CreateRealAccount(user.ID)
+	if db.Create(realAccount).Error != nil {
+		db.DbRollback()
+		return errors.New("创建账户信息失败")
+	}
+
+	//创建钱包地址
+	privateKey, Address := erc20.GenerateUserWallet()
+	wallet := NewWallet(user.ID, privateKey, Address)
+
+	if db.Create(wallet).Error != nil {
+		db.DbRollback()
+		return errors.New("钱包地址创建失败")
+	}
+
+}

@@ -2,7 +2,6 @@ package utils
 
 import (
 	"errors"
-	"fmt"
 	"github.com/mojocn/base64Captcha"
 	"image/color"
 )
@@ -49,7 +48,7 @@ var captchaString = base64Captcha.DriverString{
 	Fonts: nil,
 }
 
-func GenerateCaptcha(typ string) string {
+func GenerateCaptcha(typ string) (string, string, error) {
 	var driver base64Captcha.Driver
 	switch typ {
 	case "string":
@@ -62,9 +61,11 @@ func GenerateCaptcha(typ string) string {
 
 	c := base64Captcha.NewCaptcha(driver, store)
 
-	id, data, _ := c.Generate()
-	fmt.Println("验证码ID:", id)
-	return data
+	id, data, err := c.Generate()
+	if err != nil {
+		return "", "", errors.New("生成验证码失败")
+	}
+	return id, data, nil
 }
 
 // verify base64 captcha code

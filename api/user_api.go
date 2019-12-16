@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -42,7 +41,6 @@ func Register() gin.HandlerFunc {
 
 			if userId != 0 {
 				account := CreateVirtualAccount(userId)
-				fmt.Println("打印虚拟账户:", account.Balance)
 				//创建虚拟账户
 				service.SaveAccount(*account)
 				//生成钱包地址

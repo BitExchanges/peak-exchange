@@ -7,7 +7,7 @@ import (
 
 const salt = "slKJGt"
 
-// md5加密
+// md5加密 加盐
 func MD5Pwd(val string) string {
 	m5 := md5.New()
 	m5.Write([]byte(val))
