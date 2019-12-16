@@ -9,6 +9,7 @@ const (
 	UserNameOrPwdError = "10006" //用户名或密码错误
 	UserNotFound       = "10007" //用户不存在
 	CaptchaError       = "10008" //验证码错误
+	AuthorizationFail  = "10009" //认证失败
 
 	BlockError = "20001" //区块错误
 )

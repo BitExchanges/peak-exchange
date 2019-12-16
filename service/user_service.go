@@ -108,9 +108,16 @@ func UserRegister(user User) (User, error) {
 	}
 
 	db.DbCommit()
-	user.VirtualAccount = virtualAccount.Balance
-	user.WalletAddress = address
-	user.RealAccount = 0
-
 	return user, nil
+}
+
+// 校验用户手机号和密码
+func ValidMobileAndPwd(mobile, pwd string) bool {
+	db := utils.MainDbBegin()
+	var count int
+	db.Model(&User{}).Where("mobile=? and login_pwd=?", mobile, pwd).Count(&count)
+	if count > 0 {
+		return true
+	}
+	return false
 }

@@ -14,8 +14,9 @@ var (
 )
 
 type Claims struct {
-	Mobile string `json:"mobile"`
-	Id     int    `json:"id"`
+	Mobile   string `json:"mobile"`
+	Id       int    `json:"id"`
+	LoginPwd string `json:"login_pwd"`
 	jwt.StandardClaims
 }
 

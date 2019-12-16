@@ -36,13 +36,8 @@ func Register() gin.HandlerFunc {
 				ctx.JSON(http.StatusOK, BuildError(OperateError, err.Error()))
 				return
 			}
-
-			token, err := generateToken(user)
-
-			if err == nil {
-				user.Token = token
-				ctx.JSON(http.StatusOK, Success(user))
-			}
+			token, _ := generateToken(user)
+			ctx.JSON(http.StatusOK, Success(token))
 		}
 	}
 }
@@ -105,8 +100,9 @@ func Logout() gin.HandlerFunc {
 func generateToken(user User) (string, error) {
 	j := auth.NewJwt()
 	claims := auth.Claims{
-		Mobile: user.Mobile,
-		Id:     user.ID,
+		Mobile:   user.Mobile,
+		Id:       user.ID,
+		LoginPwd: user.LoginPwd,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: int64(time.Now().Unix() - 1000), //签名生效时间
 			ExpiresAt: int64(time.Now().Unix() + 3600), //过期时间一小时

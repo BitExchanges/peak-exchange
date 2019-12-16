@@ -24,11 +24,13 @@ type User struct {
 	CardType       int       `json:"card_type"`                            //证件类型
 	LastLoginAt    time.Time `json:"last_login_at"`                        //最后登录时间
 	LastLoginIp    string    `json:"last_login_ip"`                        //最后登录IP
-	Country        int       `json:"country"`                              //国家标识
+	Country        string    `json:"country"`                              //国家标识 86
 	Token          string    `json:"token" gorm:"-"`                       //token标识
 	VirtualAccount float64   `json:"virtual_account" gorm:"-"`             //虚拟账户
 	RealAccount    float64   `json:"real_account" gorm:"-"`                //真实账户
 	WalletAddress  string    `json:"wallet_address" gorm:"-"`              //钱包地址
+	Platform       string    `json:"platform"`                             //平台
+	Device         string    `json:"device"`                               //设备类型  pc|ios|android
 }
 
 // 常用地管理
@@ -80,4 +82,5 @@ func (user *User) Init() {
 	user.CreateAt = time.Now()
 	user.UpdateAt = time.Now()
 	user.LastLoginAt = time.Now()
+	user.Country = "86"
 }

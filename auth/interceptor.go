@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mssola/user_agent"
 	"net/http"
+	"peak-exchange/service"
 	. "peak-exchange/utils"
 )
 
@@ -26,16 +27,23 @@ func Authorize() gin.HandlerFunc {
 				fmt.Println("token 非法:", claims)
 				return
 			}
-			// 获取设备类型
-			userAgent := ctx.GetHeader("User-Agent")
-			agent := user_agent.New(userAgent)
-			if agent.Mobile() {
-				ctx.Set("device", "mobile")
+
+			if service.ValidMobileAndPwd(claims.Mobile, claims.LoginPwd) {
+				// 获取设备类型
+				userAgent := ctx.GetHeader("User-Agent")
+				agent := user_agent.New(userAgent)
+				if agent.Mobile() {
+					ctx.Set("device", "mobile")
+				} else {
+					ctx.Set("device", "web")
+				}
+				ctx.Set("userId", claims.Id)
+				ctx.Next()
 			} else {
-				ctx.Set("device", "web")
+				ctx.JSON(http.StatusOK, BuildError(AuthorizationFail, "认证失败"))
+				ctx.Abort()
+				return
 			}
-			ctx.Set("userId", claims.Id)
-			ctx.Next()
 		}
 	}
 }
