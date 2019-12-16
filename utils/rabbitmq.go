@@ -19,16 +19,14 @@ type Amqp struct {
 	} `yaml:"connect"`
 
 	Exchange struct {
-		Default  map[string]string `yaml:"default"`
-		Matching map[string]string `yaml:"matching"`
-		Trade    map[string]string `yaml:"trade"`
-		Cancel   map[string]string `yaml:"cancel"`
-		Fanout   map[string]string `yaml:"fanout"`
+		Default map[string]string `yaml:"default"`
+		Kline   map[string]string `yaml:"kline"`
+		Ticker  map[string]string `yaml:"ticker"`
 	} `yaml:"exchange"`
+
 	Queue struct {
-		Matching map[string]string `yaml:"matching"`
-		Trade    map[string]string `yaml:"trade"`
-		Cancel   map[string]string `yaml:"cancel"`
+		Kline  map[string]string `yaml:"kline"`
+		Ticker map[string]string `yaml:"ticker"`
 	} `yaml:"queue"`
 }
 
@@ -99,7 +97,78 @@ func PublishMessageWithRouteKey(exchange, routeKey, contentType string, message 
 			Body:            *message,
 		},
 	); err != nil {
-		return fmt.Errorf("Queue publish: %s", err)
+		return fmt.Errorf("发送队列消息失败: %s", err)
 	}
 	return nil
+}
+
+// declare RabbitMQ exchange
+func DeclareExchange() error {
+	channel, err := RabbitMqConnect.Channel()
+	if err != nil {
+		return fmt.Errorf("获取队列通道失败: %s", err)
+	}
+
+	err = channel.ExchangeDeclare(AmqpGlobalConfig.Exchange.Default["key"],
+		AmqpGlobalConfig.Exchange.Default["type"],
+		true,
+		false,
+		false,
+		false,
+		nil)
+	if err != nil {
+		return fmt.Errorf("创建交换机 [default] 失败: %s", err)
+	}
+	log.Printf("创建交换机 [%s] 成功\n", AmqpGlobalConfig.Exchange.Default["key"])
+
+	err = channel.ExchangeDeclare(AmqpGlobalConfig.Exchange.Kline["key"],
+		AmqpGlobalConfig.Exchange.Kline["type"],
+		true,
+		false,
+		false,
+		false,
+		nil)
+	if err != nil {
+		return fmt.Errorf("创建交换机 [kline] 失败: %s", err)
+	}
+
+	log.Printf("创建交换机 [%s] 成功\n", AmqpGlobalConfig.Exchange.Kline["key"])
+
+	err = channel.ExchangeDeclare(AmqpGlobalConfig.Exchange.Ticker["key"],
+		AmqpGlobalConfig.Exchange.Ticker["type"],
+		true,
+		false,
+		false,
+		false,
+		nil)
+	if err != nil {
+		return fmt.Errorf("创建交换机 [ticker] 失败: %s", err)
+	}
+	log.Printf("创建交换机 [%s] 成功\n", AmqpGlobalConfig.Exchange.Ticker["key"])
+	DeclareQueue(channel)
+	return nil
+}
+
+func DeclareQueue(channel *amqp.Channel) error {
+	var err error
+	_, err = channel.QueueDeclare(AmqpGlobalConfig.Queue.Kline["key"], true, false, false, false, nil)
+	if err != nil {
+		return fmt.Errorf("创建队列 [kline] 失败: %s", err)
+	}
+
+	log.Printf("创建队列 [%s] 成功\n", AmqpGlobalConfig.Queue.Kline["key"])
+
+	_, err = channel.QueueDeclare(AmqpGlobalConfig.Queue.Ticker["key"], true, false, false, false, nil)
+	if err != nil {
+		return fmt.Errorf("创建队列 [ticker] 失败: %s", err)
+	}
+	log.Printf("创建队列 [%s] 成功\n", AmqpGlobalConfig.Queue.Ticker["key"])
+	BindQueue(channel)
+	return nil
+}
+
+//  bind queue with exchange by routeKey
+func BindQueue(channel *amqp.Channel) {
+	channel.QueueBind(AmqpGlobalConfig.Queue.Kline["key"], "kline", AmqpGlobalConfig.Exchange.Kline["key"], false, nil)
+	channel.QueueBind(AmqpGlobalConfig.Queue.Ticker["key"], "ticker", AmqpGlobalConfig.Exchange.Ticker["key"], false, nil)
 }

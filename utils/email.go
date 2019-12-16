@@ -13,26 +13,11 @@ import (
 // fromUser 发件人
 // toUser   收件人
 // subject  邮件主题
-func SendEmail(fromUser, toUser, subject, emailType, ip string) error {
+func SendEmail(fromUser, toUser, subject, ip string) error {
 	e := email.NewEmail()
 	e.From = fmt.Sprintf("TopEx-Email-Service <%s>", fromUser)
 	e.To = []string{toUser}
 	e.Subject = subject
-
-	var temp *template.Template
-	var err error
-	//邮件类型分为
-	//register  注册验证码
-	//login     登录验证码
-	//lostPwd   忘记密码
-	//offSite   异地登录提醒
-	switch emailType {
-	case "register":
-	case "login":
-	case "lostPwd":
-	case "offSite":
-
-	}
 	t, err := template.ParseFiles("./email-template.html")
 	if err != nil {
 		return err
