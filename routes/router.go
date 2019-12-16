@@ -60,4 +60,11 @@ func SetInterfaces(e *gin.Engine) {
 		templateRoute.GET("/index", api.Index())
 	}
 
+	//验证码
+	captchaRoute := e.Group("/captcha")
+	{
+		captchaRoute.GET("/generateCaptcha")
+		captchaRoute.POST("/verify", api.Verify())
+	}
+
 }
