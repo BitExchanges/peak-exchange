@@ -13,11 +13,26 @@ import (
 // fromUser 发件人
 // toUser   收件人
 // subject  邮件主题
-func SendEmail(fromUser, toUser, subject, ip string) error {
+func SendEmail(fromUser, toUser, subject, emailType, ip string) error {
 	e := email.NewEmail()
-	e.From = fmt.Sprintf("Tony Pan <%s>", fromUser)
+	e.From = fmt.Sprintf("TopEx-Email-Service <%s>", fromUser)
 	e.To = []string{toUser}
 	e.Subject = subject
+
+	var temp *template.Template
+	var err error
+	//邮件类型分为
+	//register  注册验证码
+	//login     登录验证码
+	//lostPwd   忘记密码
+	//offSite   异地登录提醒
+	switch emailType {
+	case "register":
+	case "login":
+	case "lostPwd":
+	case "offSite":
+
+	}
 	t, err := template.ParseFiles("./email-template.html")
 	if err != nil {
 		return err
@@ -41,4 +56,35 @@ func SendEmail(fromUser, toUser, subject, ip string) error {
 	e.HTML = body.Bytes()
 	//e.Attach(body,"email-template.html","text/html")
 	return e.Send("smtp.qq.com:587", smtp.PlainAuth("", "769558579@qq.com", "fnbkjkhhmivzbebj", "smtp.qq.com"))
+}
+
+// 发送邮箱验证码
+func SendCaptchaEmail(fromUser, toUser, captcha string) error {
+	e := email.NewEmail()
+	e.From = fmt.Sprintf("TopEx-Email-Service <%s>", fromUser)
+	e.To = []string{toUser}
+	e.Subject = "验证码"
+	t, err := template.ParseFiles("./captcha-template.html")
+	if err != nil {
+		return err
+	}
+
+	body := new(bytes.Buffer)
+	t.Execute(body, struct {
+		FromUserName string
+		ToUserName   string
+		TimeDate     string
+		Message      string
+	}{
+		fromUser,
+		toUser,
+		time.Now().Format("2006/01/02 15:04:05"),
+		captcha,
+	})
+
+	e.HTML = body.Bytes()
+	//添加附件
+	//e.Attach(body,"email-template.html","text/html")
+	return e.Send("smtp.qq.com:587", smtp.PlainAuth("", "769558579@qq.com", "fnbkjkhhmivzbebj", "smtp.qq.com"))
+
 }

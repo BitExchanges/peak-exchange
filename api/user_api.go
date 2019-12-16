@@ -50,7 +50,7 @@ func Login() gin.HandlerFunc {
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, BuildError(ParamError, "参数错误"))
 		} else {
-			//TODO 校验用户名密码
+
 			retUser := service.SelectUserByMobile(user.Mobile)
 			if (User{}) == retUser {
 				ctx.JSON(http.StatusOK, BuildError(UserNotFound, "用户不存在"))

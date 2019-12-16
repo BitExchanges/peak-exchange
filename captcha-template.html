@@ -31,9 +31,8 @@
     </style>
 </head>
 <body>
-
 <div class="header">
-    异地登录提醒
+    验证码服务
 </div>
 
 <div class="content">
@@ -42,20 +41,13 @@
     </div>
 
     <div style="margin-top: 24px;">
-        {{.TimeDate}}&nbsp;&nbsp; 您的账户登录地址发声了变化，登录的详细信息如下：
+        您本次请求的验证码为:<span>{{.Captcha}}</span>
     </div>
     </br>
-    <div>
-        IP地址：{{.IpAddress}}
-    </div>
     <div style="margin-top: 24px;">
-        如果这不是您本人的操作，请立刻修改您的登录密码。</br>
-        如果此次登录正常，您可以在个人中心确认常用地，以后在该地区登录不会收到异常登录提示。
+        为了保障您账号的安全性，请在10分钟内完成使用。</br>
+        系统发送，请勿回复。
     </div>
 </div>
-<div class="footer">
-    联系我们   email:xxx@xx.com
-</div>
-
 </body>
 </html>
