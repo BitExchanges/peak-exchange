@@ -21,23 +21,26 @@ func SetInterfaces(e *gin.Engine) {
 	//币组
 	currencyRoute := e.Group("/api/:platform/v1/currency")
 	{
-		currencyRoute.GET("/currencyList", api.GetCurrencyList())
+		currencyRoute.GET("/currencyList", api.GetCurrencyList()) //查询当前交易对
 	}
 
 	//用户组
 	userRoute := e.Group("/api/:platform/v1/user")
 	{
-		userRoute.POST("/register", api.Register())
-		userRoute.POST("/login", api.Login())
-		userRoute.POST("/updateProfile", api.UpdateProfile())
-		userRoute.POST("/logout", api.Logout())
+		userRoute.POST("/register", api.Register())             //注册
+		userRoute.POST("/login", api.Login())                   //登录
+		userRoute.POST("/updateProfile", api.UpdateProfile())   //更新个人资料
+		userRoute.POST("/forgetLoginPwd", api.ForgetPwd())      //忘记登录密码
+		userRoute.POST("/changeLoginPwd", api.ChangeLoginPwd()) //修改登录密码
+		userRoute.POST("/changeTradePwd", api.ChangeTradePwd()) //修改交易密码
+		userRoute.POST("/logout", api.Logout())                 //退出登录
 	}
 	//杂项组
 	miscRoute := e.Group("/api/:platform/v1/misc")
 	miscRoute.Use(auth.Authorize())
 	{
-		miscRoute.POST("/sendEmail", api.SendEmailMsg())
-		miscRoute.GET("/device", api.GetDeviceType())
+		miscRoute.POST("/sendEmail", api.SendEmailMsg()) //发送邮件
+		miscRoute.GET("/device", api.GetDeviceType())    //查看设备类型
 	}
 
 	//区块
@@ -63,8 +66,8 @@ func SetInterfaces(e *gin.Engine) {
 	//验证码
 	captchaRoute := e.Group("/captcha")
 	{
-		captchaRoute.GET("/generateCaptcha")
-		captchaRoute.POST("/verify", api.Verify())
+		captchaRoute.GET("/generateCaptcha")       //生成验证码
+		captchaRoute.POST("/verify", api.Verify()) //校验验证码
 	}
 
 }

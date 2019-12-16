@@ -73,6 +73,10 @@ func (user *User) SendEmail(typ int, ip string) {
 	utils.SendEmail("769558579@qq.com", user.Email, "异地登录通知", ip)
 }
 
+func (user *User) SendEmail1(message string) {
+	utils.SendEmails(user.Email, "找回密码", message, "找回密码", "找回密码", "您的验证码为: ", "")
+}
+
 // 用户初始化基本信息
 func (user *User) Init() {
 	user.Level = "1"

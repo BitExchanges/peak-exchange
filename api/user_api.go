@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -66,8 +67,6 @@ func Login() gin.HandlerFunc {
 					loginAddress := service.SelectAuthLoginAddressByUserId(retUser.ID, ctx.ClientIP())
 					if (AuthLoginAddress{}) == loginAddress {
 						if retUser.Email != "" {
-							//TODO 将来需要通过消息中间件异步消息通知
-
 							go retUser.SendEmail(0, ctx.ClientIP())
 						}
 					}
@@ -82,6 +81,13 @@ func Login() gin.HandlerFunc {
 	}
 }
 
+// 退出登录
+func Logout() gin.HandlerFunc {
+	return func(context *gin.Context) {
+
+	}
+}
+
 // 修改用户信息
 func UpdateProfile() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
@@ -89,9 +95,41 @@ func UpdateProfile() gin.HandlerFunc {
 	}
 }
 
-// 退出登录
-func Logout() gin.HandlerFunc {
-	return func(context *gin.Context) {
+//忘记密码
+func ForgetPwd() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var user User
+		err := ctx.BindJSON(&user)
+		if err != nil {
+			ctx.JSON(http.StatusOK, BuildError(ParamError, "参数错误"))
+			return
+		}
+		if user.Mobile == "" || user.Email == "" {
+			ctx.JSON(http.StatusOK, BuildError(ParamError, "参数错误"))
+			return
+		}
+		if user.Mobile != "" {
+			fmt.Println("开始发送手机短信")
+
+		}
+
+		if user.Email != "" {
+			captchaCode := GenerateCode(4)
+			go user.SendEmail1(captchaCode)
+		}
+	}
+}
+
+// 修改登录密码
+func ChangeLoginPwd() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+
+	}
+}
+
+//修改交易密码
+func ChangeTradePwd() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
 
 	}
 }
