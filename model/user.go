@@ -2,29 +2,33 @@ package model
 
 import (
 	"peak-exchange/utils"
+	"strconv"
 	"time"
 )
 
 // 用户
 type User struct {
 	CommonModel
-	ID           int       `json:"id"`                                   //ID
-	UUID         string    `json:"uuid"`                                 //UUID 短号
-	NickName     string    `json:"nick_name"`                            //昵称
-	Name         string    `json:"name"`                                 //姓名
-	Avatar       string    `json:"avatar"`                               //头像
-	TradePwd     string    `json:"trade_pwd"`                            //交易密码
-	LoginPwd     string    `valid:"string,min=6,max=12"json:"login_pwd"` //登录密码
-	Mobile       string    `valid:"string,min=11,max=11" json:"mobile"`  //手机号
-	Email        string    `json:"email"`                                //邮箱
-	Level        string    `json:"level"`                                //用户等级
-	KycLevel     string    `json:"kyc_level"`                            //认证等级
-	IdentityCard string    `json:"identity_card"`                        //身份证
-	CardType     int       `json:"card_type"`                            //证件类型
-	LastLoginAt  time.Time `json:"last_login_at"`                        //最后登录时间
-	LastLoginIp  string    `json:"last_login_ip"`                        //最后登录IP
-	Token        string    `json:"token" gorm:"-"`                       //token标识
-	Country      int       `json:"country"`                              //国家标识
+	ID             int       `json:"id"`                                   //ID
+	UUID           string    `json:"uuid"`                                 //UUID 短号
+	NickName       string    `json:"nick_name"`                            //昵称
+	Name           string    `json:"name"`                                 //姓名
+	Avatar         string    `json:"avatar"`                               //头像
+	TradePwd       string    `json:"trade_pwd"`                            //交易密码
+	LoginPwd       string    `valid:"string,min=6,max=12"json:"login_pwd"` //登录密码
+	Mobile         string    `valid:"string,min=11,max=11" json:"mobile"`  //手机号
+	Email          string    `json:"email"`                                //邮箱
+	Level          string    `json:"level"`                                //用户等级
+	KycLevel       string    `json:"kyc_level"`                            //认证等级
+	IdentityCard   string    `json:"identity_card"`                        //身份证
+	CardType       int       `json:"card_type"`                            //证件类型
+	LastLoginAt    time.Time `json:"last_login_at"`                        //最后登录时间
+	LastLoginIp    string    `json:"last_login_ip"`                        //最后登录IP
+	Country        int       `json:"country"`                              //国家标识
+	Token          string    `json:"token" gorm:"-"`                       //token标识
+	VirtualAccount float64   `json:"virtual_account" gorm:"-"`             //虚拟账户
+	RealAccount    float64   `json:"real_account" gorm:"-"`                //真实账户
+	WalletAddress  string    `json:"wallet_address" gorm:"-"`              //钱包地址
 }
 
 // 常用地管理
@@ -65,4 +69,15 @@ func NewWallet(userId int, privateKey, address string) Wallet {
 
 func (user *User) SendEmail(typ int, ip string) {
 	utils.SendEmail("769558579@qq.com", user.Email, "异地登录通知", ip)
+}
+
+// 用户初始化基本信息
+func (user *User) Init() {
+	user.Level = "1"
+	user.Avatar = "example.png"
+	user.UUID = strconv.Itoa(int(time.Now().Unix()))
+	user.KycLevel = "0"
+	user.CreateAt = time.Now()
+	user.UpdateAt = time.Now()
+	user.LastLoginAt = time.Now()
 }

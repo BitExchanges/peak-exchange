@@ -16,7 +16,7 @@ func Save(user User) (int, error) {
 	result := SelectUserByMobile(user.Mobile)
 	if reflect.DeepEqual(result, User{}) {
 		DB.Create(&user)
-		return user.Id, nil
+		return user.ID, nil
 	} else {
 		DB.DbRollback()
 		return 0, errors.New("用户已存在")
@@ -70,41 +70,47 @@ func SaveWalletAddress(userId int) {
 }
 
 // 用户注册
-func UserRegister(user User) error {
+func UserRegister(user User) (User, error) {
 
 	db := utils.MainDbBegin()
 	//添加用户信息
 	var count int
-	db.Where("mobile=? and state=?").Count(&count)
+	db.Model(&User{}).Where("mobile=?", user.Mobile).Count(&count)
 	if count > 0 {
-		return errors.New("用户已存在")
+		return User{}, errors.New("用户已存在")
 	}
 
-	if db.Create(user).Error != nil {
-		return errors.New("创建用户失败")
+	if db.Create(&user).Error != nil {
+		return User{}, errors.New("创建用户失败")
 	}
 
 	//创建虚拟账户信息
 	virtualAccount := CreateVirtualAccount(user.ID)
-	if db.Create(virtualAccount).Error != nil {
+	if db.Create(&virtualAccount).Error != nil {
 		db.DbRollback()
-		return errors.New("创建用户账户信息失败")
+		return User{}, errors.New("创建用户账户信息失败")
 	}
 
 	//创建真实账户
 	realAccount := CreateRealAccount(user.ID)
-	if db.Create(realAccount).Error != nil {
+	if db.Create(&realAccount).Error != nil {
 		db.DbRollback()
-		return errors.New("创建账户信息失败")
+		return User{}, errors.New("创建账户信息失败")
 	}
 
 	//创建钱包地址
-	privateKey, Address := erc20.GenerateUserWallet()
-	wallet := NewWallet(user.ID, privateKey, Address)
+	privateKey, address := erc20.GenerateUserWallet()
+	wallet := NewWallet(user.ID, privateKey, address)
 
-	if db.Create(wallet).Error != nil {
+	if db.Create(&wallet).Error != nil {
 		db.DbRollback()
-		return errors.New("钱包地址创建失败")
+		return User{}, errors.New("钱包地址创建失败")
 	}
 
+	db.DbCommit()
+	user.VirtualAccount = virtualAccount.Balance
+	user.WalletAddress = address
+	user.RealAccount = 0
+
+	return user, nil
 }
