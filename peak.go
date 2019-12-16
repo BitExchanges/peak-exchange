@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -17,14 +16,15 @@ import (
 func main() {
 
 	initialize()
+	gin.ForceConsoleColor()
 	//记录日志
-	f, _ := os.Create("peak.log")
+	//f, _ := os.Create("peak.log")
 	//仅将日志写入文件
 	//gin.DefaultWriter = io.MultiWriter(f)
 
 	//同时将日志写入文件和控制台
-	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
-	gin.SetMode(gin.ReleaseMode)
+	//gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+	//gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
 	router.LoadHTMLGlob("static/*")

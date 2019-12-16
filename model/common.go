@@ -2,6 +2,12 @@ package model
 
 import "time"
 
+//type JsonTime time.Time
+//
+//func (_this JsonTime)MarshalJSON()  {
+//
+//}
+
 type CommonModel struct {
 	Id       int       `json:"id" gorm:"primary_key"`
 	CreateAt time.Time `json:"-"`

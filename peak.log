@@ -1,1 +1,0 @@
-[GIN] 2019/12/06 - 15:46:06 | 200 |   23.695496ms |             ::1 | GET      /api/admin/v1/wallet/batchAddress?count=10
