@@ -43,6 +43,7 @@ func SelectUserByMobile(mobile string) (user User) {
 		"last_login_at",
 		"last_login_ip",
 		"state",
+		"random_uuid",
 	}).Where("mobile=?", mobile).Find(&user)
 	return user
 }

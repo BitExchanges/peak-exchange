@@ -30,6 +30,7 @@ func SetInterfaces(e *gin.Engine) {
 	//用户组
 	userRoute := e.Group("/api/:platform/v1/user")
 	userRoute.Use(auth.GetDevice())
+	userRoute.Use(auth.CheckLoginIp())
 	{
 		userRoute.POST("/register", api.Register())        //注册
 		userRoute.POST("/login", api.Login())              //登录

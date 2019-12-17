@@ -18,5 +18,4 @@ func UpdateAuthLoginAddressState(userId, id int) {
 	db := utils.MainDbBegin()
 	defer db.DbCommit()
 	db.Exec("UPDATE auth_login_address SET state=1 WHERE user_id=? AND id=?", userId, id)
-
 }

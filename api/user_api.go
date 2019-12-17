@@ -96,6 +96,9 @@ func Login() gin.HandlerFunc {
 					//检查登录IP是否在常用地址内
 					loginAddress := service.SelectAuthLoginAddressByUserId(retUser.ID, ctx.ClientIP())
 					if (AuthLoginAddress{}) == loginAddress {
+
+						//如果登录地IP不在授权范围内  需要发送确认邮件进行授权
+						//在未授权之前无法操作资金账户 修改个人资料及其他
 						if retUser.Email != "" {
 							go retUser.SendEmail(0, ctx.ClientIP())
 						}

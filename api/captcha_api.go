@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	. "peak-exchange/model"
@@ -30,6 +31,7 @@ func Verify() gin.HandlerFunc {
 func CreateCaptcha() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var captchaTyp = ctx.Query("captchaType")
+		fmt.Println("打印客户端IP地址: ", ctx.ClientIP())
 		if captchaTyp == "" {
 			ctx.JSON(http.StatusOK, BuildError(ParamError, "参数错误"))
 			return

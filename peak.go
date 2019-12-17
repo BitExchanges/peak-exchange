@@ -30,7 +30,7 @@ func main() {
 	router.LoadHTMLGlob("static/*")
 	routes.SetInterfaces(router)
 	srv := &http.Server{
-		Addr:    "192.168.0.114:8080",
+		Addr:    ":80",
 		Handler: router,
 	}
 
