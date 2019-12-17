@@ -23,3 +23,10 @@ func Index() gin.HandlerFunc {
 		ctx.HTML(http.StatusOK, "index.tmpl", gin.H{"qrcode": qrCodeStr, "captcha": strings.Split(captcha, "data:image/png;base64,")[1]})
 	}
 }
+
+// 邮箱模板测试
+func EmailTemplate() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "email.html", gin.H{"test": "test"})
+	}
+}

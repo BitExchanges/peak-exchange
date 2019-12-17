@@ -30,6 +30,11 @@ func Register() gin.HandlerFunc {
 			}
 			user.Mobile = requestUser.Mobile
 			user.Email = requestUser.Email
+
+			if requestUser.Id == "" || requestUser.CaptchaCode == "" {
+				ctx.JSON(http.StatusOK, BuildError(CaptchaError, "验证码错误"))
+				return
+			}
 			//校验验证码
 			err = VerifyCaptcha(requestUser.Id, requestUser.CaptchaCode)
 			if err != nil {

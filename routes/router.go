@@ -78,6 +78,8 @@ func SetInterfaces(e *gin.Engine) {
 	{
 		templateRoute.GET("/login", api.LoginIndex())
 		templateRoute.GET("/index", api.Index())
+		templateRoute.GET("/email", api.EmailTemplate())
+
 	}
 
 }
