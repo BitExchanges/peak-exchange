@@ -5,8 +5,27 @@ import (
 )
 
 var (
-	RedisEmailForgetPwd       = "%s_forget_captcha"
-	RedisEmailForgetPwdExpire = "300"
+	RedisEmailFormatter = "%s_%s_captcha"
+
+	//验证码有效期 5分钟
+	RedisEmailExpire = "300"
+
+	RegisterKey       = "register"  //注册key
+	ForgetPwdKey      = "forgetPwd" //忘记密码key
+	ChangeTradePwdKey = "changePwd" //修改交易密码
+	ChangeLoginPwdKey = "changePwd" //修改登录密码
+
+	//记录邮件发送次数
+	RedisEmailCountFormatter = "%s_%s_count"
+	//每天邮件发送次数上限为10
+	EmailSendCount = "10"
+)
+
+var (
+	ChangeLoginPwdSubject   = "修改登录密码"
+	ChangeTradePwdSubject   = "修改交易密码"
+	RegisterActivateSubject = "注册激活"
+	ForgetPwdSubject        = "忘记密码"
 )
 
 // 计算分页参数

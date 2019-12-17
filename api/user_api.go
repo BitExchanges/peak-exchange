@@ -117,7 +117,7 @@ func ForgetPwd() gin.HandlerFunc {
 		if user.Email != "" {
 			captchaCode := GenerateCode(4)
 			go user.SendEmail1(captchaCode)
-			re, err := LimitPool.Get().Do("SET", fmt.Sprintf(common.RedisEmailForgetPwd, user.Email), captchaCode, "EX", "120")
+			re, err := LimitPool.Get().Do("SET", fmt.Sprintf(common.RedisEmailFormatter, user.Email), captchaCode, "EX", "120")
 			if err != nil {
 				fmt.Println("redis写入错误: ", err)
 			}

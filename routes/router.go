@@ -3,7 +3,6 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"peak-exchange/api"
-	"peak-exchange/auth"
 )
 
 func SetInterfaces(e *gin.Engine) {
@@ -37,7 +36,7 @@ func SetInterfaces(e *gin.Engine) {
 	}
 	//杂项组
 	miscRoute := e.Group("/api/:platform/v1/misc")
-	miscRoute.Use(auth.Authorize())
+	//miscRoute.Use(auth.Authorize())
 	{
 		miscRoute.POST("/sendEmail", api.SendEmailMsg()) //发送邮件
 		miscRoute.GET("/device", api.GetDeviceType())    //查看设备类型

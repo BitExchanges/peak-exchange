@@ -79,6 +79,7 @@ func newRedisPool(redisName string) *redis.Pool {
 		},
 		TestOnBorrow: func(c redis.Conn, t time.Time) error {
 			_, err := c.Do("PING")
+			fmt.Println("开始检测redis连接")
 			if err != nil {
 				fmt.Println("redis无法检测ping: ", err.Error())
 			}
