@@ -29,7 +29,7 @@ func Verify() gin.HandlerFunc {
 // 创建验证码
 func CreateCaptcha() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var captchaTyp = ctx.Query("captchaTyp")
+		var captchaTyp = ctx.Query("captchaType")
 		if captchaTyp == "" {
 			ctx.JSON(http.StatusOK, BuildError(ParamError, "参数错误"))
 			return

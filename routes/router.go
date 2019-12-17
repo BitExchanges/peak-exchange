@@ -8,9 +8,10 @@ import (
 
 func SetInterfaces(e *gin.Engine) {
 
+	//全局解决跨域问题
+	e.Use(auth.Cross())
 	// 订单组
 	orderRoute := e.Group("/api/:platform/v1/order")
-	orderRoute.Use(auth.GetDevice())
 	orderRoute.Use(auth.Authorize())
 	{
 		orderRoute.GET("/getOrderBook", api.GetOrderBook())
@@ -64,10 +65,11 @@ func SetInterfaces(e *gin.Engine) {
 	}
 
 	//验证码
-	captchaRoute := e.Group("/captcha")
+	captchaRoute := e.Group("api/:platform/v1/captcha")
+	captchaRoute.Use(auth.GetDevice())
 	{
-		captchaRoute.GET("/generateCaptcha")       //生成验证码
-		captchaRoute.POST("/verify", api.Verify()) //校验验证码
+		captchaRoute.GET("/generateCaptcha", api.CreateCaptcha()) //生成验证码
+		captchaRoute.POST("/verify", api.Verify())                //校验验证码
 	}
 
 	//模板测试组
