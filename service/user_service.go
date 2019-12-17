@@ -42,6 +42,7 @@ func SelectUserByMobile(mobile string) (user User) {
 		"card_type",
 		"last_login_at",
 		"last_login_ip",
+		"state",
 	}).Where("mobile=?", mobile).Find(&user)
 	return user
 }
@@ -120,4 +121,11 @@ func ValidMobileAndPwd(mobile, pwd string) bool {
 		return true
 	}
 	return false
+}
+
+// 修改用户状态信息
+func UpdateUserActive(uuid string) {
+	db := utils.MainDbBegin()
+	db.Exec("UPDATE user SET state=1 WHERE random_uuid=?", uuid)
+	db.DbCommit()
 }

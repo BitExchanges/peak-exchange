@@ -67,7 +67,7 @@ func SendEmailMsg() gin.HandlerFunc {
 			ctx.JSON(http.StatusOK, BuildError(EmailModuleError, "邮件发送服务异常"))
 			return
 		}
-		ctx.JSON(http.StatusOK, "邮件发送成功")
+		ctx.JSON(http.StatusOK, Success("邮件发送成功"))
 	}
 }
 

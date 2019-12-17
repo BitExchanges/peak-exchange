@@ -31,16 +31,33 @@ func Register() gin.HandlerFunc {
 			user.Init()
 			user.LastLoginIp = ctx.ClientIP()
 			user.LoginPwd = MD5Pwd(user.LoginPwd)
-
+			user.Device = ctx.GetString("device")
 			user, err := service.UserRegister(user)
 
 			if err != nil {
 				ctx.JSON(http.StatusOK, BuildError(OperateError, err.Error()))
 				return
 			}
-			token, _ := generateToken(user)
-			ctx.JSON(http.StatusOK, Success(token))
+
+			//TODO 发送激活邮件 需要设置有效期
+			var urlStr = fmt.Sprintf(common.ActiveUrl, user.RandomUUID)
+			go user.SendEmail1(urlStr)
+			ctx.JSON(http.StatusOK, Success("注册成功"))
 		}
+	}
+}
+
+// 激活用户
+func ActiveUser() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		uuid := ctx.Query("uuid")
+
+		if uuid == "" {
+			ctx.JSON(http.StatusOK, BuildError(ParamError, "参数错误"))
+			return
+		}
+		service.UpdateUserActive(uuid)
+		ctx.JSON(http.StatusOK, Success("用户激活成功"))
 	}
 }
 
@@ -56,6 +73,9 @@ func Login() gin.HandlerFunc {
 			retUser := service.SelectUserByMobile(user.Mobile)
 			if (User{}) == retUser {
 				ctx.JSON(http.StatusOK, BuildError(UserNotFound, "用户不存在"))
+				return
+			} else if retUser.State == 0 {
+				ctx.JSON(http.StatusOK, BuildError(NotActive, "请先激活用户"))
 				return
 			} else {
 				encrypt := MD5Pwd(user.LoginPwd)

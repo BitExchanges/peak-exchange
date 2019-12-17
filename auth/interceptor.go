@@ -9,6 +9,21 @@ import (
 	. "peak-exchange/utils"
 )
 
+// 获取设备类型
+func GetDevice() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		// 获取设备类型
+		userAgent := ctx.GetHeader("User-Agent")
+		agent := user_agent.New(userAgent)
+		if agent.Mobile() {
+			ctx.Set("device", "mobile")
+		} else {
+			ctx.Set("device", "web")
+		}
+		ctx.Next()
+	}
+}
+
 // 认证处理
 func Authorize() gin.HandlerFunc {
 
@@ -29,14 +44,6 @@ func Authorize() gin.HandlerFunc {
 			}
 
 			if service.ValidMobileAndPwd(claims.Mobile, claims.LoginPwd) {
-				// 获取设备类型
-				userAgent := ctx.GetHeader("User-Agent")
-				agent := user_agent.New(userAgent)
-				if agent.Mobile() {
-					ctx.Set("device", "mobile")
-				} else {
-					ctx.Set("device", "web")
-				}
 				ctx.Set("userId", claims.Id)
 				ctx.Next()
 			} else {

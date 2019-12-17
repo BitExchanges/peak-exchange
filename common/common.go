@@ -28,6 +28,8 @@ var (
 	ForgetPwdSubject        = "忘记密码"
 )
 
+var ActiveUrl = "http://localhost:8080/api/dev/v1/user/active?uuid=%s"
+
 // 计算分页参数
 func LimitAndPage(limit, page string) (int, int) {
 	limitTemp, pageTemp := 20, 1

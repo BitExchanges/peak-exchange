@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/pborman/uuid"
 	"peak-exchange/utils"
 	"strconv"
 	"time"
@@ -31,6 +32,8 @@ type User struct {
 	WalletAddress  string    `json:"wallet_address" gorm:"-"`              //钱包地址
 	Platform       string    `json:"platform"`                             //平台
 	Device         string    `json:"device"`                               //设备类型  pc|ios|android
+	State          int       `json:"state"`                                //用户状态 0未激活  1已激活
+	RandomUUID     string    `json:"-"`                                    //注册生成随机码
 }
 
 // 常用地管理
@@ -40,7 +43,7 @@ type AuthLoginAddress struct {
 	Address   string    `json:"address"`    //地址名称
 	IpAddress string    `json:"ip_address"` //IP
 	State     int       `json:"state"`      //状态  0-未确认  1-已确认
-	LoginType string    `json:"login_type"` //登录设备类型
+	Device    string    `json:"login_type"` //登录设备类型
 	LoginAt   time.Time `json:"login_at"`   //登录时间
 	CommonModel
 }
@@ -87,4 +90,6 @@ func (user *User) Init() {
 	user.UpdateAt = time.Now()
 	user.LastLoginAt = time.Now()
 	user.Country = "86"
+	user.RandomUUID = uuid.New()
+	user.State = 0
 }

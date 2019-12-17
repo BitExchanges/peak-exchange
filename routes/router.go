@@ -3,13 +3,15 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"peak-exchange/api"
+	"peak-exchange/auth"
 )
 
 func SetInterfaces(e *gin.Engine) {
 
 	// 订单组
 	orderRoute := e.Group("/api/:platform/v1/order")
-	//orderRoute.Use(auth.Authorize())
+	orderRoute.Use(auth.GetDevice())
+	orderRoute.Use(auth.Authorize())
 	{
 		orderRoute.GET("/getOrderBook", api.GetOrderBook())
 		orderRoute.GET("/getOrderByNo/:orderNo", api.GetOrderByNo())
@@ -19,24 +21,29 @@ func SetInterfaces(e *gin.Engine) {
 
 	//币组
 	currencyRoute := e.Group("/api/:platform/v1/currency")
+	currencyRoute.Use(auth.GetDevice())
 	{
 		currencyRoute.GET("/currencyList", api.GetCurrencyList()) //查询当前交易对
 	}
 
 	//用户组
 	userRoute := e.Group("/api/:platform/v1/user")
+	userRoute.Use(auth.GetDevice())
 	{
-		userRoute.POST("/register", api.Register())             //注册
-		userRoute.POST("/login", api.Login())                   //登录
+		userRoute.POST("/register", api.Register())        //注册
+		userRoute.POST("/login", api.Login())              //登录
+		userRoute.POST("/logout", api.Logout())            //退出登录
+		userRoute.POST("/forgetLoginPwd", api.ForgetPwd()) //忘记登录密码
+		userRoute.GET("/active", api.ActiveUser())         //激活
+		userRoute.Use(auth.Authorize())
 		userRoute.POST("/updateProfile", api.UpdateProfile())   //更新个人资料
-		userRoute.POST("/forgetLoginPwd", api.ForgetPwd())      //忘记登录密码
 		userRoute.POST("/changeLoginPwd", api.ChangeLoginPwd()) //修改登录密码
 		userRoute.POST("/changeTradePwd", api.ChangeTradePwd()) //修改交易密码
-		userRoute.POST("/logout", api.Logout())                 //退出登录
+
 	}
 	//杂项组
 	miscRoute := e.Group("/api/:platform/v1/misc")
-	//miscRoute.Use(auth.Authorize())
+	miscRoute.Use(auth.GetDevice())
 	{
 		miscRoute.POST("/sendEmail", api.SendEmailMsg()) //发送邮件
 		miscRoute.GET("/device", api.GetDeviceType())    //查看设备类型
@@ -56,17 +63,18 @@ func SetInterfaces(e *gin.Engine) {
 		walletRoute.GET("/batchAddress", api.BatchGenerateAddress())
 	}
 
-	templateRoute := e.Group("/template")
-	{
-		templateRoute.GET("/login", api.LoginIndex())
-		templateRoute.GET("/index", api.Index())
-	}
-
 	//验证码
 	captchaRoute := e.Group("/captcha")
 	{
 		captchaRoute.GET("/generateCaptcha")       //生成验证码
 		captchaRoute.POST("/verify", api.Verify()) //校验验证码
+	}
+
+	//模板测试组
+	templateRoute := e.Group("/template")
+	{
+		templateRoute.GET("/login", api.LoginIndex())
+		templateRoute.GET("/index", api.Index())
 	}
 
 }

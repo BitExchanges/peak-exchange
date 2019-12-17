@@ -11,6 +11,7 @@ const (
 	CaptchaError       = "10008" //验证码错误
 	AuthorizationFail  = "10009" //认证失败
 	EmailFrequently    = "10010" //邮件发送频繁
+	NotActive          = "10011" //暂未激活
 
 	BlockError = "20001" //区块错误
 
