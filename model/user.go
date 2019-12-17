@@ -36,6 +36,14 @@ type User struct {
 	RandomUUID     string    `json:"-"`                                    //注册生成随机码
 }
 
+type RequestUser struct {
+	Mobile      string `valid:"string,min=11,max=11"json:"mobile"`    //手机号
+	Email       string ` valid:"email" json:"email"`                  //邮箱
+	LoginPwd    string `valid:"string,min=6,max=12" json:"login_pwd"` //登录密码
+	Id          string `json:"id"`                                    //验证码ID
+	CaptchaCode string `json:"captcha_code"`                          //验证码
+}
+
 // 常用地管理
 type AuthLoginAddress struct {
 	Id        int       `json:"id"`         //主键

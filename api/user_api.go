@@ -16,15 +16,24 @@ import (
 // 注册
 func Register() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		var requestUser RequestUser
 		var user User
-		err := ctx.BindJSON(&user)
+		err := ctx.BindJSON(&requestUser)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, BuildError(ParamError, "参数错误"))
 		} else {
 			//校验用户信息
-			err = ValidateStruct(user)
+			err = ValidateStruct(requestUser)
 			if err != nil {
 				ctx.JSON(http.StatusOK, BuildError(ParamError, err.Error()))
+				return
+			}
+			user.Mobile = requestUser.Mobile
+			user.Email = requestUser.Email
+			//校验验证码
+			err = VerifyCaptcha(requestUser.Id, requestUser.CaptchaCode)
+			if err != nil {
+				ctx.JSON(http.StatusOK, BuildError(CaptchaError, "验证码错误"))
 				return
 			}
 
