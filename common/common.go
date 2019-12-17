@@ -1,6 +1,13 @@
 package common
 
-import "strconv"
+import (
+	"strconv"
+)
+
+var (
+	RedisEmailForgetPwd       = "%s_forget_captcha"
+	RedisEmailForgetPwdExpire = "300"
+)
 
 // 计算分页参数
 func LimitAndPage(limit, page string) (int, int) {

@@ -56,5 +56,5 @@ func main() {
 func initialize() {
 	config.InitEnv()
 	utils.InitMainDB()
-	//utils.InitRedisPools()
+	utils.InitRedisPools()
 }

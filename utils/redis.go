@@ -8,18 +8,14 @@ import (
 
 var (
 	RailsCachePool *redis.Pool
-	DatePool       *redis.Pool
-	TickerPool     *redis.Pool
-	KLinePool      *redis.Pool
-	LimitPool      *redis.Pool
+
+	LimitPool *redis.Pool
+	MiscPool  *redis.Pool
 )
 
 // 初始化各种连接池
 func InitRedisPools() {
 	RailsCachePool = newRedisPool("cache")
-	DatePool = newRedisPool("data")
-	TickerPool = newRedisPool("ticker")
-	KLinePool = newRedisPool("k")
 	LimitPool = newRedisPool("limit")
 
 }
@@ -27,9 +23,6 @@ func InitRedisPools() {
 // 关闭连接池
 func CloseRedisPools() {
 	RailsCachePool.Close()
-	DatePool.Close()
-	TickerPool.Close()
-	KLinePool.Close()
 	LimitPool.Close()
 }
 
@@ -37,12 +30,6 @@ func CloseRedisPools() {
 func GetRedisConn(redisName string) redis.Conn {
 	if redisName == "cache" {
 		return RailsCachePool.Get()
-	} else if redisName == "data" {
-		return DatePool.Get()
-	} else if redisName == "ticker" {
-		return TickerPool.Get()
-	} else if redisName == "k" {
-		return KLinePool.Get()
 	} else if redisName == "limit" {
 		return LimitPool.Get()
 	}
