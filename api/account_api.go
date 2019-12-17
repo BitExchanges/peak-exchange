@@ -1,11 +1,18 @@
 package api
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
+	"peak-exchange/service"
+	. "peak-exchange/utils"
+)
 
 // 查询账户信息
 func GetAccount() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-
+		userId := ctx.GetInt("userId")
+		accountList := service.SelectUserAccountList(userId)
+		ctx.JSON(http.StatusOK, Success(accountList))
 	}
 }
 
