@@ -5,10 +5,12 @@ import (
 )
 
 var (
+
+	//邮箱_key_captcha
 	RedisEmailFormatter = "%s_%s_captcha"
 
 	//验证码有效期 5分钟
-	RedisEmailExpire = "300"
+	RedisEmailExpire = "120"
 
 	RegisterKey       = "register"  //注册key
 	ForgetPwdKey      = "forgetPwd" //忘记密码key
@@ -28,7 +30,7 @@ var (
 	ForgetPwdSubject        = "忘记密码"
 )
 
-var ActiveUrl = "http://x5u6p3.natappfree.cc/api/dev/v1/user/active?uuid=%s"
+var ActiveUrl = "http://f5vcm2.natappfree.cc/api/dev/v1/user/active?uuid=%s"
 
 // 计算分页参数
 func LimitAndPage(limit, page string) (int, int) {

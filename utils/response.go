@@ -1,17 +1,19 @@
 package utils
 
 const (
-	AccessDenied       = "10001" //无访问权限
-	NotFound           = "10002" //暂无数据
-	ParamError         = "10003" //参数错误
-	IllegalToken       = "10004" //非法token
-	OperateError       = "10005" //操作失败
-	UserNameOrPwdError = "10006" //用户名或密码错误
-	UserNotFound       = "10007" //用户不存在
-	CaptchaError       = "10008" //验证码错误
-	AuthorizationFail  = "10009" //认证失败
-	EmailFrequently    = "10010" //邮件发送频繁
-	NotActive          = "10011" //暂未激活
+	AccessDenied         = "10001" //无访问权限
+	NotFound             = "10002" //暂无数据
+	ParamError           = "10003" //参数错误
+	IllegalToken         = "10004" //非法token
+	OperateError         = "10005" //操作失败
+	UserNameOrPwdError   = "10006" //用户名或密码错误
+	UserNotFound         = "10007" //用户不存在
+	CaptchaError         = "10008" //验证码错误
+	AuthorizationFail    = "10009" //认证失败
+	EmailFrequently      = "10010" //邮件发送频繁
+	NotActive            = "10011" //暂未激活
+	SystemError          = "10012" //系统错误
+	PasswordDisagreement = "10013" //密码不一致
 
 	BlockError = "20001" //区块错误
 

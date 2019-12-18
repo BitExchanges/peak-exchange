@@ -136,30 +136,42 @@ func UpdateProfile() gin.HandlerFunc {
 //忘记密码
 func ForgetPwd() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var user User
-		err := ctx.BindJSON(&user)
+		redisCon := LimitPool.Get()
+		var requestUser RequestUser
+		err := ctx.BindJSON(&requestUser)
 		if err != nil {
 			ctx.JSON(http.StatusOK, BuildError(ParamError, "参数错误"))
 			return
 		}
-		if user.Mobile == "" || user.Email == "" {
+		if requestUser.Email == "" {
 			ctx.JSON(http.StatusOK, BuildError(ParamError, "参数错误"))
 			return
 		}
-		if user.Mobile != "" {
-			fmt.Println("开始发送手机短信")
-
+		if requestUser.LoginPwd != requestUser.ConfirmLoginPwd {
+			ctx.JSON(http.StatusOK, BuildError(PasswordDisagreement, "密码不一致"))
+			return
 		}
 
-		if user.Email != "" {
-			captchaCode := GenerateCode(4)
-			go user.SendEmail1(captchaCode)
-			re, err := LimitPool.Get().Do("SET", fmt.Sprintf(common.RedisEmailFormatter, user.Email), captchaCode, "EX", "120")
-			if err != nil {
-				fmt.Println("redis写入错误: ", err)
-			}
-			fmt.Println("reply: ", re)
+		user := service.SelectUserByEmail(requestUser.Email)
+		if (User{}) == user {
+			ctx.JSON(http.StatusOK, BuildError(UserNotFound, "用户不存在"))
+			return
 		}
+
+		reply, err := redisCon.Do("GET", fmt.Sprintf(common.RedisEmailFormatter, requestUser.Email, common.ForgetPwdKey))
+		if err != nil {
+			ctx.JSON(http.StatusOK, BuildError(SystemError, "系统错误"))
+			return
+		}
+
+		if reply.(string) != requestUser.CaptchaCode {
+			ctx.JSON(http.StatusOK, BuildError(CaptchaError, "验证码错误"))
+			return
+		}
+
+		encrptPwd := MD5Pwd(requestUser.LoginPwd)
+		service.UpdateLoginPwdByEmail(requestUser.Email, encrptPwd)
+		ctx.JSON(http.StatusOK, Success("修改登录密码成功"))
 	}
 }
 

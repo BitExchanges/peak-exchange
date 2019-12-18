@@ -48,6 +48,37 @@ func SelectUserByMobile(mobile string) (user User) {
 	return user
 }
 
+// 根据邮箱查询用户信息
+func SelectUserByEmail(email string) (user User) {
+	db := utils.MainDbBegin()
+	defer db.DbCommit()
+	db.Select([]string{
+		"id",
+		"uuid",
+		"nick_name",
+		"avatar",
+		"mobile",
+		"login_pwd",
+		"email",
+		"level",
+		"kyc_level",
+		"identity_card",
+		"card_type",
+		"last_login_at",
+		"last_login_ip",
+		"state",
+		"random_uuid",
+	}).Where("email=? and state=1", email).Find(&user)
+	return user
+}
+
+// 根据邮箱修改登录密码
+func UpdateLoginPwdByEmail(email, pwd string) {
+	db := utils.MainDbBegin()
+	defer db.CommonDB()
+	db.Model(&User{}).Where("email=?", email).Update("login_pwd", pwd)
+}
+
 //更新用户信息
 func UpdateUser(user User) {
 	db := utils.MainDbBegin()
