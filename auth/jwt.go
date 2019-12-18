@@ -3,6 +3,7 @@ package auth
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
+	"time"
 )
 
 var (
@@ -43,6 +44,7 @@ func NewJwt() *JWT {
 // 创建token
 func (j *JWT) CreateToken(claims Claims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
 	return token.SignedString(j.SigningKey)
 }
 
@@ -70,7 +72,23 @@ func (j *JWT) ParseToken(tokenStr string) (*Claims, error) {
 	return nil, TokenInvalid
 }
 
-// 刷新token
-//func (j *JWT)RefreshToken(tokenStr string)(string,error)  {
-//
-//}
+// 刷新token 用户退出登录
+func (j *JWT) RefreshToken(tokenStr string) (string, error) {
+	jwt.TimeFunc = func() time.Time {
+		return time.Unix(0, 0)
+	}
+	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (i interface{}, e error) {
+		return j.SigningKey, nil
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
+		jwt.TimeFunc = time.Now
+		claims.StandardClaims.ExpiresAt = time.Now().Unix()
+		return j.CreateToken(*claims)
+	}
+	return "", TokenInvalid
+}

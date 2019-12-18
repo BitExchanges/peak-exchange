@@ -68,7 +68,7 @@ func SelectUserByEmail(email string) (user User) {
 		"last_login_ip",
 		"state",
 		"random_uuid",
-	}).Where("email=? and state=1", email).Find(&user)
+	}).Where("email=?", email).Find(&user)
 	return user
 }
 

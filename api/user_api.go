@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"peak-exchange/auth"
 	"peak-exchange/common"
@@ -44,7 +45,7 @@ func Register() gin.HandlerFunc {
 
 			user.Init()
 			user.LastLoginIp = ctx.ClientIP()
-			user.LoginPwd = MD5Pwd(user.LoginPwd)
+			user.LoginPwd = MD5Pwd(requestUser.LoginPwd)
 			user.Device = ctx.GetString("device")
 			user, err := service.UserRegister(user)
 
@@ -85,19 +86,22 @@ func Login() gin.HandlerFunc {
 			ctx.JSON(http.StatusBadRequest, BuildError(ParamError, "参数错误"))
 		} else {
 
-			if requestUser.Id != "" && requestUser.CaptchaCode != "" {
-				err := VerifyCaptcha(requestUser.Id, requestUser.CaptchaCode)
-				if err != nil {
-					ctx.JSON(http.StatusOK, BuildError(CaptchaError, "验证码错误"))
-					return
-				}
-			}
+			//if requestUser.Id != "" && requestUser.CaptchaCode != "" {
+			//	err := VerifyCaptcha(requestUser.Id, requestUser.CaptchaCode)
+			//	if err != nil {
+			//		ctx.JSON(http.StatusOK, BuildError(CaptchaError, "验证码错误"))
+			//		return
+			//	}
+			//} else if requestUser.Id == "" || requestUser.CaptchaCode == "" {
+			//	ctx.JSON(http.StatusOK,BuildError(ParamError,"参数错误"))
+			//	return
+			//}
 			if requestUser.LoginType == "mobile" {
 				retUser = service.SelectUserByMobile(requestUser.Mobile)
 			} else if requestUser.LoginType == "email" {
 				retUser = service.SelectUserByEmail(requestUser.Email)
 			} else {
-				ctx.JSON(http.StatusOK, BuildError(SystemError, "系统错误"))
+				ctx.JSON(http.StatusOK, BuildError(ParamError, "参数错误"))
 				return
 			}
 
@@ -121,14 +125,16 @@ func Login() gin.HandlerFunc {
 						//如果登录地IP不在授权范围内  需要发送确认邮件进行授权
 						//在未授权之前无法操作资金账户 修改个人资料及其他
 						if retUser.Email != "" {
-							go retUser.SendEmail(0, ctx.ClientIP())
+							log.Println("登陆地IP不在授权地址列表，需要发送邮件确认")
+							//TODO 后续需要打开邮件发发送开关
+							//go retUser.SendEmail(0, ctx.ClientIP())
 						}
 					}
 					retUser.LastLoginIp = ctx.ClientIP()
 					service.UpdateUser(retUser)
 					token, _ := generateToken(retUser)
 					retUser.Token = token
-					ctx.JSON(http.StatusOK, Success(retUser))
+					ctx.JSON(http.StatusOK, Success(token))
 				}
 			}
 		}
@@ -137,8 +143,11 @@ func Login() gin.HandlerFunc {
 
 // 退出登录
 func Logout() gin.HandlerFunc {
-	return func(context *gin.Context) {
-
+	return func(ctx *gin.Context) {
+		jwt := auth.NewJwt()
+		token := ctx.GetHeader("token")
+		jwt.RefreshToken(token)
+		ctx.JSON(http.StatusOK, Success("退出登录成功"))
 	}
 }
 
