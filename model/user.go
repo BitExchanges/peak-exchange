@@ -40,11 +40,30 @@ type RequestUser struct {
 	Mobile          string `valid:"string,min=11,max=11"json:"mobile"`    //手机号
 	Email           string `json:"email"`                                 //邮箱   TODO 此处邮箱valid校验错误，需要后续补充
 	LoginPwd        string `valid:"string,min=6,max=12" json:"login_pwd"` //登录密码
+	TradePwd        string `json:"trade_pwd"`                             //交易密码
 	ConfirmLoginPwd string `json:"confirm_login_pwd"`                     //确认登录密码
 	Id              string `json:"id"`                                    //验证码ID
 	CaptchaCode     string `json:"captcha_code"`                          //验证码
 	LoginType       string `json:"login_type"`                            //登录方式  email  mobile
 
+}
+
+type ResponseUser struct {
+	UUID          string    `json:"uuid"`                                //UUID 短号
+	NickName      string    `json:"nick_name"`                           //昵称
+	Name          string    `json:"name"`                                //姓名
+	Avatar        string    `json:"avatar"`                              //头像
+	Mobile        string    `valid:"string,min=11,max=11" json:"mobile"` //手机号
+	Email         string    `json:"email"`                               //邮箱
+	Level         string    `json:"level"`                               //用户等级
+	KycLevel      string    `json:"kyc_level"`                           //认证等级
+	IdentityCard  string    `json:"identity_card"`                       //身份证
+	CardType      int       `json:"card_type"`                           //证件类型
+	LastLoginAt   time.Time `json:"last_login_at"`                       //最后登录时间
+	LastLoginIp   string    `json:"last_login_ip"`                       //最后登录IP
+	Country       string    `json:"country"`                             //国家标识 86
+	Token         string    `json:"token" gorm:"-"`                      //token标识
+	WalletAddress string    `json:"wallet_address" gorm:"-"`             //钱包地址
 }
 
 // 常用地管理

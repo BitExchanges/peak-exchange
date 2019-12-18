@@ -24,3 +24,10 @@ func BatchSaveAddress(wallet Wallet) {
 	defer db.DbCommit()
 	db.Create(&wallet)
 }
+
+// 根据用户ID 删除钱包地址
+func DeleteWallet(userId, id int) {
+	db := utils.MainDbBegin()
+	defer db.CommonDB()
+	db.Delete(&Wallet{}, "id=? AND user_id=?", id, userId)
+}

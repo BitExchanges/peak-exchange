@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -86,6 +87,7 @@ func Login() gin.HandlerFunc {
 			ctx.JSON(http.StatusBadRequest, BuildError(ParamError, "参数错误"))
 		} else {
 
+			//TODO 登录暂时不校验 验证码
 			//if requestUser.Id != "" && requestUser.CaptchaCode != "" {
 			//	err := VerifyCaptcha(requestUser.Id, requestUser.CaptchaCode)
 			//	if err != nil {
@@ -134,7 +136,10 @@ func Login() gin.HandlerFunc {
 					service.UpdateUser(retUser)
 					token, _ := generateToken(retUser)
 					retUser.Token = token
-					ctx.JSON(http.StatusOK, Success(token))
+					var responseUser ResponseUser
+					userBytes, _ := json.Marshal(retUser)
+					json.Unmarshal(userBytes, &responseUser)
+					ctx.JSON(http.StatusOK, Success(responseUser))
 				}
 			}
 		}
@@ -203,14 +208,31 @@ func ForgetPwd() gin.HandlerFunc {
 // 修改登录密码
 func ChangeLoginPwd() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		var userId = ctx.GetInt("userId")
+		var requestUser RequestUser
+		err := ctx.BindJSON(&requestUser)
+		if err != nil {
+			ctx.JSON(http.StatusOK, BuildError(ParamError, "参数错误"))
+			return
+		}
 
+		//TODO 需要手机验证码  或邮箱验证码
+		service.UpdateUserLoginPwd(userId, requestUser.TradePwd)
 	}
 }
 
 //修改交易密码
 func ChangeTradePwd() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-
+		var userId = ctx.GetInt("userId")
+		var requestUser RequestUser
+		err := ctx.BindJSON(&requestUser)
+		if err != nil {
+			ctx.JSON(http.StatusOK, BuildError(ParamError, "参数错误"))
+			return
+		}
+		//TODO 需要手机验证码  或邮箱验证码
+		service.UpdateUserTradePwd(userId, requestUser.TradePwd)
 	}
 }
 

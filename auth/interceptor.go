@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/mssola/user_agent"
+	"log"
 	"net/http"
 	"peak-exchange/service"
 	. "peak-exchange/utils"
@@ -57,7 +57,8 @@ func Authorize() gin.HandlerFunc {
 			claims, err := j.ParseToken(token)
 			if err != nil {
 				ctx.JSON(http.StatusOK, BuildError(IllegalToken, "非法token"))
-				fmt.Println("token 非法:", claims)
+				log.Println("token 非法:", claims)
+				ctx.Abort()
 				return
 			}
 

@@ -34,7 +34,7 @@ func SetInterfaces(e *gin.Engine) {
 	{
 		userRoute.POST("/register", api.Register())        //注册
 		userRoute.POST("/login", api.Login())              //登录
-		userRoute.POST("/logout", api.Logout())            //退出登录
+		userRoute.POST("/logout", api.Logout())            //退出登录  TODO 暂时没有想好如何处理jwt问题
 		userRoute.POST("/forgetLoginPwd", api.ForgetPwd()) //忘记登录密码
 		userRoute.GET("/active", api.ActiveUser())         //激活
 		userRoute.Use(auth.Authorize())

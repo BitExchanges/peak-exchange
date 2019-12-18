@@ -44,6 +44,7 @@ func SelectUserByMobile(mobile string) (user User) {
 		"last_login_ip",
 		"state",
 		"random_uuid",
+		"country",
 	}).Where("mobile=?", mobile).Find(&user)
 	return user
 }
@@ -68,6 +69,7 @@ func SelectUserByEmail(email string) (user User) {
 		"last_login_ip",
 		"state",
 		"random_uuid",
+		"country",
 	}).Where("email=?", email).Find(&user)
 	return user
 }
@@ -160,4 +162,20 @@ func UpdateUserActive(uuid string) {
 	db := utils.MainDbBegin()
 	db.Exec("UPDATE user SET state=1 WHERE random_uuid=?", uuid)
 	db.DbCommit()
+}
+
+// 修改用户登录密码
+func UpdateUserLoginPwd(userId int, loginPwd string) {
+	db := utils.MainDbBegin()
+	defer db.CommonDB()
+
+	db.Model(&User{}).Where("id=?", userId).Update("login_pwd", loginPwd)
+}
+
+// 修改用户交易密码
+func UpdateUserTradePwd(userId int, tradePwd string) {
+	db := utils.MainDbBegin()
+	defer db.CommonDB()
+
+	db.Model(&User{}).Where("id=?", userId).Update("trade_pwd", tradePwd)
 }
