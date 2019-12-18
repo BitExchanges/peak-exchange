@@ -43,6 +43,7 @@ type RequestUser struct {
 	ConfirmLoginPwd string `json:"confirm_login_pwd"`                     //确认登录密码
 	Id              string `json:"id"`                                    //验证码ID
 	CaptchaCode     string `json:"captcha_code"`                          //验证码
+	LoginType       string `json:"login_type"`                            //登录方式  email  mobile
 
 }
 

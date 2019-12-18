@@ -78,13 +78,29 @@ func ActiveUser() gin.HandlerFunc {
 // 登录
 func Login() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var user User
-		err := ctx.BindJSON(&user)
+		var requestUser RequestUser
+		var retUser User
+		err := ctx.BindJSON(&requestUser)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, BuildError(ParamError, "参数错误"))
 		} else {
 
-			retUser := service.SelectUserByMobile(user.Mobile)
+			if requestUser.Id != "" && requestUser.CaptchaCode != "" {
+				err := VerifyCaptcha(requestUser.Id, requestUser.CaptchaCode)
+				if err != nil {
+					ctx.JSON(http.StatusOK, BuildError(CaptchaError, "验证码错误"))
+					return
+				}
+			}
+			if requestUser.LoginType == "mobile" {
+				retUser = service.SelectUserByMobile(requestUser.Mobile)
+			} else if requestUser.LoginType == "email" {
+				retUser = service.SelectUserByEmail(requestUser.Email)
+			} else {
+				ctx.JSON(http.StatusOK, BuildError(SystemError, "系统错误"))
+				return
+			}
+
 			if (User{}) == retUser {
 				ctx.JSON(http.StatusOK, BuildError(UserNotFound, "用户不存在"))
 				return
@@ -92,7 +108,7 @@ func Login() gin.HandlerFunc {
 				ctx.JSON(http.StatusOK, BuildError(NotActive, "请先激活用户"))
 				return
 			} else {
-				encrypt := MD5Pwd(user.LoginPwd)
+				encrypt := MD5Pwd(requestUser.LoginPwd)
 				if encrypt != retUser.LoginPwd {
 					ctx.JSON(http.StatusOK, BuildError(UserNameOrPwdError, "用户名或密码错误"))
 					return
