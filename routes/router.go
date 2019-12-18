@@ -14,10 +14,20 @@ func SetInterfaces(e *gin.Engine) {
 	orderRoute := e.Group("/api/:platform/v1/order")
 	orderRoute.Use(auth.Authorize())
 	{
-		orderRoute.GET("/getOrderBook", api.GetOrderBook())
-		orderRoute.GET("/getOrderByNo/:orderNo", api.GetOrderByNo())
-		orderRoute.GET("/getOrderByUserId", api.GetOrderBookByUserId())
-		orderRoute.POST("/taker", api.Maker())
+		orderRoute.GET("/getOrderBook", api.GetOrderBook())             //查询所有订单簿
+		orderRoute.GET("/getOrderByNo/:orderNo", api.GetOrderByNo())    //根据订单号查询详细
+		orderRoute.GET("/getOrderByUserId", api.GetOrderBookByUserId()) //查询用户订单簿
+		orderRoute.POST("/maker", api.Maker())                          //挂单
+		orderRoute.POST("/cancelOrder/:orderNo")                        //撤单
+
+	}
+
+	//账户组
+	accountRoute := e.Group("/api/:platform/v1/account")
+	{
+		accountRoute.GET("/balance/:type/:currency/") //查询账户余额
+		accountRoute.POST("/recharge/:currency")      //账户充值
+		accountRoute.POST("/transfer/:")              //转账
 	}
 
 	//币组

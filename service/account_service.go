@@ -9,7 +9,7 @@ import (
 // typ      资金类型 0-虚拟账户 1-真实账户
 // userId   用户ID
 // currency 资金名称
-func SelectUserAccount(typ, userId int, currency string) (account Account) {
+func SelectAccountBalance(typ, userId int, currency string) (account Account) {
 	db := utils.MainDbBegin()
 	defer db.DbCommit()
 	db.Where("type=? AND user_id=? AND currency=?", typ, userId, currency).Find(&account)

@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	. "peak-exchange/model"
 	"peak-exchange/service"
@@ -47,6 +48,8 @@ func GetOrderBookByUserId() gin.HandlerFunc {
 // 挂单
 func Maker() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		var userId = ctx.GetInt("userId")
+		log.Println("用户ID: ", userId)
 		var order Order
 		err := ctx.BindJSON(&order)
 		if err != nil {

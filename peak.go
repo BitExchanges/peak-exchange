@@ -17,6 +17,9 @@ func main() {
 
 	initialize()
 	gin.ForceConsoleColor()
+	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
+		log.Printf("[Bitong] %v %v %v %v\n", httpMethod, absolutePath, handlerName, nuHandlers)
+	}
 	//记录日志
 	//f, _ := os.Create("peak.log")
 	//仅将日志写入文件
@@ -24,7 +27,7 @@ func main() {
 
 	//同时将日志写入文件和控制台
 	//gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
-	//gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
 	router.LoadHTMLGlob("static/*")

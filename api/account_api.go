@@ -16,6 +16,13 @@ func GetAccount() gin.HandlerFunc {
 	}
 }
 
+func GetAccountBalance() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		userId := ctx.GetInt("userId")
+
+	}
+}
+
 // 创建账户
 //func CreateAccount() gin.HandlerFunc {
 //	return func(ctx *gin.Context) {

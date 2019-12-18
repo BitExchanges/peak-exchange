@@ -15,8 +15,8 @@ import (
 // 查询用户钱包列表
 func GetWallet() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		userId := ctx.GetInt("userId")
-		limit, page := common.LimitAndPage(ctx.Query("limit"), ctx.Query("page"))
+		//userId := ctx.GetInt("userId")
+		//limit, page := common.LimitAndPage(ctx.Query("limit"), ctx.Query("page"))
 
 	}
 }

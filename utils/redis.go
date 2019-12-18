@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"fmt"
 	"github.com/gomodule/redigo/redis"
+	"log"
 	"time"
 )
 
@@ -56,13 +56,13 @@ func newRedisPool(redisName string) *redis.Pool {
 		Dial: func() (redis.Conn, error) {
 			conn, err := redis.Dial(network, server)
 			if err != nil {
-				fmt.Println("无法连接redis: ", err.Error())
+				log.Println("无法连接redis: ", err.Error())
 				return nil, err
 			}
 			if password != "" {
 				_, err := conn.Do("AUTH", password)
 				if err != nil {
-					fmt.Println("redis认证失败: ", err.Error())
+					log.Println("redis认证失败: ", err.Error())
 					conn.Close()
 					return nil, err
 				}
@@ -70,7 +70,7 @@ func newRedisPool(redisName string) *redis.Pool {
 			if db != "" {
 				_, err := conn.Do("SELECT", db)
 				if err != nil {
-					fmt.Println("redis无法选择数据库: ", err.Error())
+					log.Println("redis无法选择数据库: ", err.Error())
 					conn.Close()
 					return nil, err
 				}
@@ -79,9 +79,9 @@ func newRedisPool(redisName string) *redis.Pool {
 		},
 		TestOnBorrow: func(c redis.Conn, t time.Time) error {
 			_, err := c.Do("PING")
-			fmt.Println("开始检测redis连接")
+			log.Println("开始检测redis连接")
 			if err != nil {
-				fmt.Println("redis无法检测ping: ", err.Error())
+				log.Println("redis无法检测ping: ", err.Error())
 			}
 			return err
 		},

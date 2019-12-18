@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	. "peak-exchange/model"
 	"peak-exchange/service"
@@ -25,7 +25,7 @@ func CheckLoginIp() gin.HandlerFunc {
 		requestUrl := ctx.Request.RequestURI
 		userId := ctx.GetInt("userId")
 		ip := ctx.ClientIP()
-		fmt.Println("请求URL: ", requestUrl)
+		log.Println("请求URL: ", requestUrl)
 		address := service.SelectAuthLoginAddressByUserId(userId, ip)
 		//判断用户操作IP是否在授权表中
 		if (AuthLoginAddress{}) == address {
@@ -44,7 +44,7 @@ func CheckLoginIp() gin.HandlerFunc {
 					}
 				}
 				if !allow {
-					fmt.Println("规则不满足")
+					log.Println("规则不满足")
 					ctx.JSON(http.StatusOK, BuildError(AccessDenied, "暂无权限"))
 					ctx.Abort()
 					return
